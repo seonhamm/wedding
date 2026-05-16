@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>전선함 ♥ 정혜련 결혼합니다</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ── 리셋 & 기본 ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --iv: #faf8f4; --ww: #f5f2ec; --cr: #e8e2d9;
+  --st: #c4b8a8; --tp: #8c7d6e; --dk: #3a3330; --gd: #b8a080;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--iv);
+  font-family: 'Noto Serif KR', serif;
+  color: var(--dk);
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+/* ── 스크롤 페이드인 ── */
+.sec { opacity: 0; transform: translateY(28px); transition: opacity .9s, transform .9s; }
+.sec.v { opacity: 1; transform: translateY(0); }
+@keyframes fu { from { opacity:0; transform:translateY(36px); } to { opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════
+   HERO — 포토북 스와이프
+════════════════════════════════════════ */
+.book-hero {
+  background: var(--iv);
+  padding: 56px 0 0;
+  position: relative;
+}
+
+.hero-titles {
+  text-align: center;
+  padding: 0 32px 40px;
+  animation: fu 1.2s ease both;
+}
+.label-sm {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 5px;
+  color: var(--st); text-transform: uppercase; margin-bottom: 24px;
+}
+.hero-names {
+  font-size: 28px; font-weight: 300;
+  letter-spacing: 8px; color: var(--dk); line-height: 1.5;
+}
+.amp {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 24px;
+  color: var(--gd); margin: 0 6px; letter-spacing: 0;
+}
+.hero-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; letter-spacing: 3px;
+  color: var(--tp); margin-top: 16px; line-height: 2;
+}
+
+/* ── 스와이프 슬라이더 ── */
+.slider-wrap {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 0;
+  touch-action: pan-y;
+}
+.slider-track {
+  display: flex;
+  transition: transform .45s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.slide {
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+}
+.slide-inner {
+  margin: 0 28px;
+  background: var(--ww);
+  border: 1px solid var(--cr);
+  overflow: hidden;
+}
+.slide-photo {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: linear-gradient(135deg, var(--ww) 0%, var(--cr) 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.slide-photo svg { opacity: .12; }
+.slide-photo-label {
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--st); text-transform: uppercase;
+}
+.slide-caption {
+  padding: 20px 20px 24px;
+  border-top: 1px solid var(--cr);
+}
+.slide-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 3px; color: var(--gd); margin-bottom: 6px;
+}
+.slide-title {
+  font-size: 14px; font-weight: 300; letter-spacing: 3px; color: var(--dk);
+}
+.slide-desc {
+  font-size: 11px; color: var(--st); margin-top: 6px; line-height: 1.8; font-weight: 300;
+}
+
+/* ── 슬라이더 컨트롤 ── */
+.slider-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; padding: 20px 0 32px;
+}
+.slider-btn {
+  width: 36px; height: 36px;
+  border: 1px solid var(--cr); background: var(--ww);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--tp);
+  transition: all .3s; font-family: serif; user-select: none;
+}
+.slider-btn:hover { background: var(--dk); color: var(--iv); border-color: var(--dk); }
+.slider-dots { display: flex; gap: 8px; }
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cr); transition: all .3s; cursor: pointer;
+}
+.dot.active { background: var(--gd); width: 18px; border-radius: 3px; }
+.swipe-hint {
+  text-align: center;
+  font-size: 9px; letter-spacing: 3px; color: var(--st);
+  padding-bottom: 8px; font-family: 'Cormorant Garamond', serif;
+}
+
+/* ════════════════════════════════════════
+   구분선
+════════════════════════════════════════ */
+.sep { margin: 0 32px; height: 1px; background: var(--cr); }
+
+/* ════════════════════════════════════════
+   인사말
+════════════════════════════════════════ */
+.greeting-section {
+  padding: 56px 32px;
+  text-align: center;
+}
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 5px;
+  color: var(--st); text-transform: uppercase; margin-bottom: 24px;
+}
+.greeting-text {
+  font-size: 13px; line-height: 2.8; color: var(--tp); font-weight: 300;
+}
+
+/* ════════════════════════════════════════
+   카운트다운
+════════════════════════════════════════ */
+.countdown-section {
+  padding: 0 28px 56px;
+}
+.cd-card {
+  background: var(--ww);
+  border: 1px solid var(--cr);
+  padding: 36px 24px;
+  text-align: center;
+}
+.cd-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 5px;
+  color: var(--st); text-transform: uppercase; margin-bottom: 28px;
+}
+.cd-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.cd-box {
+  background: var(--iv);
+  border: 1px solid var(--cr);
+  padding: 16px 4px;
+  text-align: center;
+}
+.cd-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 300;
+  color: var(--dk); line-height: 1;
+  letter-spacing: -1px;
+}
+.cd-label {
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--st); margin-top: 8px; text-transform: uppercase;
+}
+.cd-date {
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px; letter-spacing: 3px; color: var(--tp);
+}
+
+/* ════════════════════════════════════════
+   일시/장소
+════════════════════════════════════════ */
+.venue-section {
+  padding: 0 28px 16px;
+}
+.info-card {
+  background: var(--ww); border: 1px solid var(--cr); padding: 32px 24px;
+}
+.info-row {
+  display: flex; justify-content: space-between;
+  padding: 13px 0; border-bottom: 1px solid var(--cr);
+  font-size: 12px; gap: 16px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-key {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--st); flex-shrink: 0; text-transform: uppercase;
+}
+.info-val {
+  font-weight: 300; color: var(--dk);
+  text-align: right; line-height: 1.9;
+}
+
+/* ════════════════════════════════════════
+   지도 + 네이버 길찾기
+════════════════════════════════════════ */
+.map-section {
+  margin: 0 28px;
+}
+.map-embed {
+  width: 100%; height: 200px; display: block; border: none;
+}
+.map-actions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--cr); border-top: none;
+}
+.map-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 15px 8px; cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 2px; color: var(--tp);
+  text-decoration: none; background: var(--ww);
+  border: none; transition: all .3s; text-align: center;
+}
+.map-btn:first-child { border-right: 1px solid var(--cr); }
+.map-btn:hover { background: var(--dk); color: var(--iv); }
+.map-btn .icon { font-size: 14px; }
+
+/* ════════════════════════════════════════
+   교통 안내
+════════════════════════════════════════ */
+.transport-section {
+  margin: 12px 28px 0;
+  background: var(--ww); border: 1px solid var(--cr); border-top: none;
+  padding: 20px 24px;
+}
+.transport-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--cr); font-size: 12px;
+}
+.transport-row:last-child { border-bottom: none; }
+.transport-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.transport-text { font-weight: 300; color: var(--tp); line-height: 1.9; }
+
+/* ════════════════════════════════════════
+   연락처
+════════════════════════════════════════ */
+.contact-section {
+  padding: 48px 28px 0;
+}
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.contact-card {
+  background: var(--ww); border: 1px solid var(--cr);
+  padding: 18px 12px; text-align: center;
+  text-decoration: none; display: block;
+  transition: all .3s;
+}
+.contact-card:hover { background: var(--dk); border-color: var(--dk); }
+.contact-card:hover .c-role,
+.contact-card:hover .c-name,
+.contact-card:hover .c-tel { color: var(--iv); }
+.c-role {
+  font-size: 9px; letter-spacing: 3px; color: var(--st);
+  text-transform: uppercase; margin-bottom: 7px; transition: color .3s;
+}
+.c-name {
+  font-size: 13px; font-weight: 300; letter-spacing: 2px;
+  color: var(--dk); transition: color .3s;
+}
+.c-tel {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; color: var(--tp); margin-top: 6px;
+  letter-spacing: 1px; transition: color .3s;
+}
+
+/* ════════════════════════════════════════
+   계좌
+════════════════════════════════════════ */
+.account-section { padding: 32px 28px 56px; }
+details {
+  border: 1px solid var(--cr); background: var(--ww);
+  margin-bottom: 8px;
+}
+summary {
+  padding: 16px 20px; font-size: 12px; color: var(--tp);
+  cursor: pointer; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+}
+summary::-webkit-details-marker { display: none; }
+.summary-icon {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; color: var(--st); transition: transform .3s;
+}
+details[open] .summary-icon { transform: rotate(45deg); }
+.account-body {
+  padding: 0 20px 18px;
+  font-size: 12px; color: var(--tp); line-height: 2.2; font-weight: 300;
+}
+.account-copy {
+  display: inline-block; margin-top: 8px;
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--gd); cursor: pointer; border-bottom: 1px solid var(--cr);
+  padding-bottom: 2px;
+}
+
+/* ── 푸터 ── */
+footer {
+  padding: 32px; text-align: center; border-top: 1px solid var(--cr);
+}
+footer p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--st); opacity: .5; text-transform: uppercase;
+}
+
+/* ── 토스트 ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: var(--dk); color: var(--iv);
+  font-size: 11px; letter-spacing: 2px; padding: 12px 24px;
+  opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO — 포토북 ═════════════════════════════════════ -->
+<section class="book-hero">
+  <div class="hero-titles">
+    <p class="label-sm">Wedding Invitation</p>
+    <h1 class="hero-names">전선함 <span class="amp">&</span> 정혜련</h1>
+    <p class="hero-date">2026 · 09 · 05 &nbsp;·&nbsp; 토요일 낮 12시</p>
+  </div>
+
+  <!-- 스와이프 슬라이더 -->
+  <div class="slider-wrap" id="slider">
+    <div class="slider-track" id="track">
+
+      <!-- 슬라이드 1 -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="slide-photo">
+            <svg viewBox="0 0 200 250" width="160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="250" fill="none" stroke="#c4b8a8" stroke-width="1"/>
+              <path d="M80,80 Q100,60 120,80 L130,180 L70,180 Z" fill="#e8e2d9"/>
+              <circle cx="100" cy="60" r="20" fill="#d4c8b8"/>
+            </svg>
+            <p class="slide-photo-label">Photo 01</p>
+          </div>
+          <div class="slide-caption">
+            <p class="slide-num">01 / 04</p>
+            <p class="slide-title">처음 만남</p>
+            <p class="slide-desc">우연한 자리에서<br>처음으로 눈이 마주쳤습니다</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 슬라이드 2 -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="slide-photo" style="background: linear-gradient(135deg, #f0ebe0, #e8e2d9);">
+            <svg viewBox="0 0 200 250" width="160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="250" fill="none" stroke="#c4b8a8" stroke-width="1"/>
+              <ellipse cx="80" cy="120" rx="25" ry="50" fill="#e8e2d9"/>
+              <ellipse cx="120" cy="120" rx="25" ry="50" fill="#ddd6cb"/>
+              <circle cx="80" cy="70" r="18" fill="#d4c8b8"/>
+              <circle cx="120" cy="70" r="18" fill="#c8bcac"/>
+            </svg>
+            <p class="slide-photo-label">Photo 02</p>
+          </div>
+          <div class="slide-caption">
+            <p class="slide-num">02 / 04</p>
+            <p class="slide-title">첫 여행</p>
+            <p class="slide-desc">함께한 첫 여행에서<br>소중한 추억을 쌓았습니다</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 슬라이드 3 -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="slide-photo" style="background: linear-gradient(135deg, #ede8de, #e0dbd0);">
+            <svg viewBox="0 0 200 250" width="160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="250" fill="none" stroke="#c4b8a8" stroke-width="1"/>
+              <path d="M100,90 C100,78 88,78 88,90 C88,98 100,106 100,106 C100,106 112,98 112,90 C112,78 100,78 100,90Z" fill="#c4b8a8"/>
+              <path d="M70,200 Q100,160 130,200" stroke="#c4b8a8" stroke-width="1" fill="none"/>
+              <circle cx="100" cy="65" r="16" fill="#d4c8b8"/>
+            </svg>
+            <p class="slide-photo-label">Photo 03</p>
+          </div>
+          <div class="slide-caption">
+            <p class="slide-num">03 / 04</p>
+            <p class="slide-title">프로포즈</p>
+            <p class="slide-desc">평생을 함께하자는<br>소중한 약속을 했습니다</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 슬라이드 4 -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="slide-photo" style="background: linear-gradient(135deg, #f5f0e8, #ede8de);">
+            <svg viewBox="0 0 200 250" width="160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="250" fill="none" stroke="#c4b8a8" stroke-width="1"/>
+              <!-- 신랑 -->
+              <circle cx="80" cy="70" r="18" fill="#d4c8b8"/>
+              <rect x="58" y="92" width="44" height="70" rx="5" fill="#3a3330"/>
+              <!-- 신부 -->
+              <circle cx="122" cy="70" r="18" fill="#d4c8b8"/>
+              <path d="M104,92 L140,92 L148,162 L96,162 Z" fill="#faf8f4"/>
+              <!-- 하트 -->
+              <path d="M101,52 C101,44 93,44 93,52 C93,58 101,64 101,64 C101,64 109,58 109,52 C109,44 101,44 101,52Z" fill="#c4b8a8"/>
+            </svg>
+            <p class="slide-photo-label">Photo 04</p>
+          </div>
+          <div class="slide-caption">
+            <p class="slide-num">04 / 04</p>
+            <p class="slide-title">결혼합니다</p>
+            <p class="slide-desc">2026년 9월 5일<br>사랑으로 하나가 됩니다</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /track -->
+  </div><!-- /slider-wrap -->
+
+  <!-- 컨트롤 -->
+  <div class="slider-controls">
+    <button class="slider-btn" id="prev" onclick="move(-1)" aria-label="이전">&#8592;</button>
+    <div class="slider-dots" id="dots">
+      <div class="dot active" onclick="goTo(0)"></div>
+      <div class="dot" onclick="goTo(1)"></div>
+      <div class="dot" onclick="goTo(2)"></div>
+      <div class="dot" onclick="goTo(3)"></div>
+    </div>
+    <button class="slider-btn" id="next" onclick="move(1)" aria-label="다음">&#8594;</button>
+  </div>
+  <p class="swipe-hint">← 스와이프 →</p>
+</section>
+
+<!-- ══ 구분선 ══════════════════════════════════════════════ -->
+<div class="sep"></div>
+
+<!-- ══ 인사말 ═══════════════════════════════════════════════ -->
+<section class="greeting-section sec">
+  <p class="section-label">Greeting</p>
+  <p class="greeting-text">
+    서로가 마주보며 다져온 사랑을<br>
+    이제 함께 한 곳을 바라보며<br>
+    걸어가고자 합니다.<br><br>
+    저희 두 사람이 사랑으로 하나 되는 날<br>
+    오셔서 축복해 주시면<br>
+    더없는 기쁨이 되겠습니다.
+  </p>
+</section>
+
+<!-- ══ 카운트다운 ════════════════════════════════════════════ -->
+<div class="sep"></div>
+<section class="countdown-section sec" style="padding-top: 48px;">
+  <div class="cd-card">
+    <p class="cd-title">결혼식까지</p>
+    <div class="cd-grid">
+      <div class="cd-box">
+        <div class="cd-num" id="cd-d">--</div>
+        <div class="cd-label">Days</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cd-h">--</div>
+        <div class="cd-label">Hours</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cd-m">--</div>
+        <div class="cd-label">Min</div>
+      </div>
+      <div class="cd-box">
+        <div class="cd-num" id="cd-s">--</div>
+        <div class="cd-label">Sec</div>
+      </div>
+    </div>
+    <p class="cd-date">2026 · 09 · 05 &nbsp;토요일 낮 12시</p>
+  </div>
+</section>
+
+<!-- ══ 구분선 ══════════════════════════════════════════════ -->
+<div class="sep"></div>
+
+<!-- ══ 일시 / 장소 ══════════════════════════════════════════ -->
+<section class="sec" style="padding: 48px 0 16px;">
+  <p class="section-label" style="text-align:center; margin-bottom:24px;">Date &amp; Venue</p>
+  <div class="venue-section">
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-key">Date</span>
+        <span class="info-val">2026년 9월 5일 토요일 낮 12시</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Venue</span>
+        <span class="info-val">한국프레스센터<br>20층 국제회의장</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">Address</span>
+        <span class="info-val">서울시 중구 세종대로 124</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 지도 + 교통 안내 ════════════════════════════════════ -->
+<div class="sec map-section">
+  <!-- 네이버 지도 iframe 미리보기 -->
+  <iframe
+    class="map-embed"
+    src="https://map.naver.com/p/search/한국프레스센터/place/11573771?c=15,0,0,0,dh"
+    loading="lazy"
+    title="한국프레스센터 위치"
+    style="border: 1px solid var(--cr);">
+  </iframe>
+
+  <!-- 길찾기 버튼 -->
+  <div class="map-actions">
+    <button class="map-btn" onclick="naverRoute()">
+      <span class="icon">🧭</span> 네이버 길찾기
+    </button>
+    <a class="map-btn"
+       href="https://map.naver.com/p/directions/-/-/transit?c=15,0,0,0,dh&destination=37.5664,126.9751,한국프레스센터"
+       target="_blank" rel="noopener">
+      <span class="icon">🗺</span> 지도 보기
+    </a>
+  </div>
+</div>
+
+<!-- 교통 안내 -->
+<div class="sec transport-section">
+  <div class="transport-row">
+    <span class="transport-icon">🚇</span>
+    <div class="transport-text">
+      <strong style="font-weight:400; color:var(--dk);">1 · 2호선</strong> 시청역 4번 출구 (도보 2분)<br>
+      <strong style="font-weight:400; color:var(--dk);">5호선</strong> 광화문역 5번 출구 (도보 5분)
+    </div>
+  </div>
+  <div class="transport-row">
+    <span class="transport-icon">🚌</span>
+    <div class="transport-text">
+      서울 파이낸스 빌딩 하차 (도보 2분)
+    </div>
+  </div>
+  <div class="transport-row">
+    <span class="transport-icon">🅿️</span>
+    <div class="transport-text">
+      건물 내 주차장 이용 가능<br>
+      <span style="font-size:11px; color:var(--st);">※ 대중교통 이용을 권장드립니다</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 연락처 ════════════════════════════════════════════════ -->
+<div class="contact-section sec">
+  <p class="section-label" style="text-align:center; margin-bottom:20px;">Contact</p>
+  <div class="contact-grid">
+    <a href="tel:01040142986" class="contact-card">
+      <p class="c-role">신랑</p>
+      <p class="c-name">전선함</p>
+      <p class="c-tel">010-4014-2986</p>
+    </a>
+    <a href="tel:01067220315" class="contact-card">
+      <p class="c-role">신부</p>
+      <p class="c-name">정혜련</p>
+      <p class="c-tel">010-6722-0315</p>
+    </a>
+    <div class="contact-card" style="cursor:default;">
+      <p class="c-role">신랑 부</p>
+      <p class="c-name">전유문</p>
+    </div>
+    <div class="contact-card" style="cursor:default;">
+      <p class="c-role">신부 부</p>
+      <p class="c-name">정이섭</p>
+    </div>
+    <div class="contact-card" style="cursor:default;">
+      <p class="c-role">신랑 모</p>
+      <p class="c-name">홍명의</p>
+    </div>
+    <div class="contact-card" style="cursor:default;">
+      <p class="c-role">신부 모</p>
+      <p class="c-name">하미정</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 계좌 ═════════════════════════════════════════════════ -->
+<div class="account-section sec">
+  <p class="section-label" style="text-align:center; margin-bottom:16px;">마음 전하실 곳</p>
+  <details>
+    <summary>
+      신랑측 계좌번호
+      <span class="summary-icon">+</span>
+    </summary>
+    <div class="account-body">
+      국민은행 734002-00-040783<br>예금주 : 전선함
+      <br><span class="account-copy" onclick="copyText('734002-00-040783')">번호 복사</span>
+    </div>
+  </details>
+  <details>
+    <summary>
+      신부측 계좌번호
+      <span class="summary-icon">+</span>
+    </summary>
+    <div class="account-body">
+      은행명 000-000-000000<br>예금주 : 정혜련
+      <br><span class="account-copy" onclick="copyText('000-000-000000')">번호 복사</span>
+    </div>
+  </details>
+</div>
+
+<!-- ══ 푸터 ══════════════════════════════════════════════════ -->
+<footer>
+  <p>Jeon &amp; Chung · September 2026</p>
+</footer>
+
+<!-- ══ 토스트 ════════════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+/* ══ 스크롤 페이드인 ════════════════════════════ */
+const io = new IntersectionObserver(
+  e => e.forEach(x => x.isIntersecting && x.target.classList.add('v')),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.sec').forEach(el => io.observe(el));
+
+
+/* ══ 슬라이더 ══════════════════════════════════ */
+const track = document.getElementById('track');
+const dots  = document.querySelectorAll('.dot');
+const total = 4;
+let cur = 0;
+let startX = 0;
+let isDragging = false;
+
+function updateSlider() {
+  track.style.transform = `translateX(-${cur * 100}%)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+}
+
+function move(dir) {
+  cur = (cur + dir + total) % total;
+  updateSlider();
+}
+
+function goTo(idx) {
+  cur = idx;
+  updateSlider();
+}
+
+// 터치 스와이프
+const sliderEl = document.getElementById('slider');
+sliderEl.addEventListener('touchstart', e => {
+  startX = e.touches[0].clientX;
+  isDragging = true;
+}, { passive: true });
+
+sliderEl.addEventListener('touchend', e => {
+  if (!isDragging) return;
+  const diff = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) move(diff > 0 ? 1 : -1);
+  isDragging = false;
+});
+
+// 마우스 드래그 (데스크탑 테스트용)
+sliderEl.addEventListener('mousedown', e => {
+  startX = e.clientX; isDragging = true;
+});
+sliderEl.addEventListener('mouseup', e => {
+  if (!isDragging) return;
+  const diff = startX - e.clientX;
+  if (Math.abs(diff) > 40) move(diff > 0 ? 1 : -1);
+  isDragging = false;
+});
+
+
+/* ══ 카운트다운 ════════════════════════════════ */
+function tick() {
+  const wedding = new Date('2026-09-05T12:00:00+09:00');
+  const now     = new Date();
+  const diff    = wedding - now;
+
+  if (diff <= 0) {
+    ['d','h','m','s'].forEach(k => {
+      document.getElementById('cd-' + k).textContent = '00';
+    });
+    return;
+  }
+
+  const d = Math.floor(diff / 864e5);
+  const h = Math.floor(diff % 864e5 / 36e5);
+  const m = Math.floor(diff % 36e5 / 6e4);
+  const s = Math.floor(diff % 6e4 / 1e3);
+
+  document.getElementById('cd-d').textContent = String(d).padStart(2, '0');
+  document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+}
+tick();
+setInterval(tick, 1000);
+
+
+/* ══ 네이버 길찾기 ═════════════════════════════
+   현재 위치 GPS → 목적지(한국프레스센터) 길찾기
+   nmap://route?
+     slat=현재위도 &slng=현재경도 &sname=현재위치
+     &dlat=37.5664 &dlng=126.9751 &dname=한국프레스센터
+     &appname=wedding.jeonchung.2026
+     &mode=transit (대중교통)
+
+   앱 미설치 fallback → 네이버 지도 웹 길찾기
+════════════════════════════════════════════════ */
+const DEST_LAT  = 37.5664;
+const DEST_LNG  = 126.9751;
+const DEST_NAME = '한국프레스센터';
+const APP_NAME  = 'wedding.jeonchung.2026';
+
+function naverRoute() {
+  if (!navigator.geolocation) {
+    // GPS 불가 → 목적지만 지정해서 열기
+    openNaverFallback(null, null);
+    return;
+  }
+
+  showToast('현재 위치를 확인하는 중...');
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const slat = pos.coords.latitude;
+      const slng = pos.coords.longitude;
+      openNaverRoute(slat, slng);
+    },
+    err => {
+      // 위치 권한 거부 등 → 출발지 없이 목적지만
+      showToast('위치 권한이 없어 목적지만 표시합니다');
+      openNaverFallback(null, null);
+    },
+    { timeout: 8000, maximumAge: 30000 }
+  );
+}
+
+function openNaverRoute(slat, slng) {
+  // nmap:// URL — 앱 설치 시 바로 실행
+  const nmapURL = slat
+    ? `nmap://route/transit?`
+      + `slat=${slat}&slng=${slng}&sname=현재위치`
+      + `&dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
+      + `&appname=${APP_NAME}`
+    : `nmap://route/transit?`
+      + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
+      + `&appname=${APP_NAME}`;
+
+  // Android intent URL (앱 없으면 Play 스토어)
+  const intentURL = `intent://route/transit?`
+    + (slat ? `slat=${slat}&slng=${slng}&sname=현재위치&` : '')
+    + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
+    + `&appname=${APP_NAME}`
+    + `#Intent;scheme=nmap;action=android.intent.action.VIEW;`
+    + `category=android.intent.category.BROWSABLE;`
+    + `package=com.nhn.android.nmap;end`;
+
+  // 웹 fallback URL
+  const webURL = slat
+    ? `https://map.naver.com/p/directions/${slng},${slat},현재위치/-/${DEST_LNG},${DEST_LAT},${encodeURIComponent(DEST_NAME)}/transit?c=15,0,0,0,dh`
+    : `https://map.naver.com/p/directions/-/-/${DEST_LNG},${DEST_LAT},${encodeURIComponent(DEST_NAME)}/transit?c=15,0,0,0,dh`;
+
+  const ua = navigator.userAgent.toLowerCase();
+
+  if (/iphone|ipad|ipod/.test(ua)) {
+    // iOS: nmap:// 시도 → 1.5초 후 미실행이면 앱스토어
+    const fallbackTimer = setTimeout(() => {
+      window.location.href = 'https://apps.apple.com/kr/app/naver-map-navigation/id311867728';
+    }, 1500);
+    window.location.href = nmapURL;
+    window.addEventListener('blur', () => clearTimeout(fallbackTimer), { once: true });
+
+  } else if (/android/.test(ua)) {
+    // Android: intent URL 사용
+    window.location.href = intentURL;
+
+  } else {
+    // 데스크탑: 웹 URL로 열기
+    window.open(webURL, '_blank');
+  }
+}
+
+function openNaverFallback(slat, slng) {
+  openNaverRoute(slat, slng);
+}
+
+
+/* ══ 계좌번호 복사 ═════════════════════════════ */
+function copyText(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('계좌번호가 복사되었습니다'));
+  } else {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('계좌번호가 복사되었습니다');
+  }
+}
+
+
+/* ══ 토스트 ════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

@@ -454,6 +454,32 @@ footer p {
   color: var(--st); opacity: .5; text-transform: uppercase;
 }
 
+/* ════════════════════════════════════════
+   라이트박스 (사진 전체화면 보기)
+════════════════════════════════════════ */
+.lightbox {
+  display: none;
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.92);
+  align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 92vw; max-height: 88vh;
+  object-fit: contain;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  cursor: default;
+}
+.lightbox-close {
+  position: absolute; top: 20px; right: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; color: rgba(255,255,255,.7);
+  cursor: pointer; line-height: 1;
+  transition: color .2s; user-select: none;
+}
+.lightbox-close:hover { color: #fff; }
+
 /* ── 토스트 ── */
 .toast {
   position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
@@ -770,25 +796,25 @@ footer p {
   <div class="gallery-grid" id="galleryGrid">
 
     <!-- 대표 사진 2장 (항상 표시) -->
-    <div class="gallery-item">
-      <img src="photo1.jpg" alt="웨딩 사진 1">
+    <div class="gallery-item" style="cursor:zoom-in;">
+      <img src="photo1.jpg" alt="웨딩 사진 1" onclick="openLightbox(this)">
     </div>
-    <div class="gallery-item">
-      <img src="photo2.jpg" alt="웨딩 사진 2">
+    <div class="gallery-item" style="cursor:zoom-in;">
+      <img src="photo2.jpg" alt="웨딩 사진 2" onclick="openLightbox(this)">
     </div>
 
     <!-- 추가 사진 (더보기 전까지 숨김) -->
-    <div class="gallery-item extra hidden">
-      <img src="photo3.jpg" alt="웨딩 사진 3">
+    <div class="gallery-item extra hidden" style="cursor:zoom-in;">
+      <img src="photo3.jpg" alt="웨딩 사진 3" onclick="openLightbox(this)">
     </div>
-    <div class="gallery-item extra hidden">
-      <img src="photo4.jpg" alt="웨딩 사진 4">
+    <div class="gallery-item extra hidden" style="cursor:zoom-in;">
+      <img src="photo4.jpg" alt="웨딩 사진 4" onclick="openLightbox(this)">
     </div>
-    <div class="gallery-item extra hidden">
-      <img src="photo5.jpg" alt="웨딩 사진 5">
+    <div class="gallery-item extra hidden" style="cursor:zoom-in;">
+      <img src="photo5.jpg" alt="웨딩 사진 5" onclick="openLightbox(this)">
     </div>
-    <div class="gallery-item extra hidden">
-      <img src="photo6.jpg" alt="웨딩 사진 6">
+    <div class="gallery-item extra hidden" style="cursor:zoom-in;">
+      <img src="photo6.jpg" alt="웨딩 사진 6" onclick="openLightbox(this)">
     </div>
 
   </div>
@@ -842,6 +868,12 @@ footer p {
 <footer>
   <p>Jeon &amp; Chung · September 2026</p>
 </footer>
+
+<!-- ══ 라이트박스 ════════════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+</div>
 
 <!-- ══ 토스트 ════════════════════════════════════════════════ -->
 <div class="toast" id="toast"></div>
@@ -953,8 +985,8 @@ setInterval(tick, 1000);
 ════════════════════════════════════════════════════════ */
 const DEST_NAME       = '한국프레스센터';
 const SEARCH_Q        = '서울 중구 세종대로 124 한국프레스센터';
-const NAVER_SHARE_URL = 'https://naver.me/FRoubAty'; // 네이버 앱 공유 링크
-const KAKAO_SHARE_URL = 'https://kko.to/m2xsIpi9yS';     // 카카오 앱 공유 링크
+const NAVER_SHARE_URL = 'https://naver.me/5nholNgm'; // 네이버 앱 공유 링크 (프레스센터플라자)
+const KAKAO_SHARE_URL = 'https://kko.to/vdybJdnPGT';     // 카카오 앱 공유 링크 (프레스센터플라자웨딩)
 
 /* ── 네이버: 공유 링크 열기 ──────────────────────
    naver.me 단축 링크를 그대로 연다.
@@ -1012,6 +1044,23 @@ function openKakaoMap(e) {
 function toggleGift() {
   document.getElementById('giftBanner').classList.toggle('open');
 }
+
+/* ══ 라이트박스 ══════════════════════════════════════════════
+   openLightbox(img): 클릭한 img의 src를 라이트박스에 넣고 표시
+   closeLightbox(): 오버레이·✕·ESC 로 닫기
+════════════════════════════════════════════════════════════ */
+function openLightbox(img) {
+  document.getElementById('lightboxImg').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden'; // 배경 스크롤 잠금
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
 
 /* ══ 갤러리 더보기 / 접기 토글 ══════════════════════════ */
 function showMorePhotos() {

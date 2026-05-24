@@ -1271,7 +1271,7 @@ function fallbackCopyLink(url) {
    - 앱키: 본인 앱의 JavaScript 키로 교체 필요
    - objectType 'feed': 썸네일 + 제목 + 설명 + 버튼
 ════════════════════════════════════════════════ */
-const KAKAO_APP_KEY = '16d2d010422dcfc2758b4b569020f7f2'; // ← 카카오 developers.kakao.com에서 발급
+const KAKAO_APP_KEY = '16d2d010422dcfc2758b4b569020f7f2';
 
 function shareKakao() {
   const doShare = () => {
@@ -1280,7 +1280,7 @@ function shareKakao() {
       content: {
         title: '전선함 ♥ 정혜련 결혼합니다',
         description: '2026년 9월 5일 토요일 낮 12시 · 한국프레스센터',
-        imageUrl: 'https://seonhamm.github.io/wedding/og_image.jpg', // ← OG 이미지 URL로 교체
+        imageUrl: 'https://seonhamm.github.io/wedding/photo1.jpg',
         link: {
           mobileWebUrl: window.location.href,
           webUrl: window.location.href,

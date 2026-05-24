@@ -932,118 +932,68 @@ tick();
 setInterval(tick, 1000);
 
 
-/* ══ 네이버 길찾기 ═════════════════════════════
-   현재 위치 GPS → 목적지(한국프레스센터) 길찾기
-   nmap://route?
-     slat=현재위도 &slng=현재경도 &sname=현재위치
-     &dlat=37.5664 &dlng=126.9751 &dname=한국프레스센터
-     &appname=wedding.jeonchung.2026
-     &mode=transit (대중교통)
+/* ══ 길찾기 — 검증된 좌표 + 장소명 ════════════════════════
+   ★ 목적지 좌표는 사용자가 네이버/카카오 앱에서 직접 확인한
+     검증값을 사용한다 (추정 금지).
+     - 위도(LAT) : 37.567423
+     - 경도(LNG) : 126.977891
+     좌표로 목적지를 직접 지정해 버튼 한 번에 경로가 그려지고,
+     장소명(dname/name)도 함께 넘겨 앱 화면에 이름이 표시된다.
 
-   앱 미설치 fallback → 네이버 지도 웹 길찾기
-════════════════════════════════════════════════ */
-const DEST_LAT  = 37.5667;
-const DEST_LNG  = 126.9762;
+   ※ 좌표를 바꿔야 할 일이 생기면 아래 세 상수만 수정하면
+     네이버·카카오·지도열기 모든 동작이 함께 갱신된다.
+════════════════════════════════════════════════════════ */
+const DEST_LAT  = 37.567423;
+const DEST_LNG  = 126.977891;
 const DEST_NAME = '한국프레스센터';
-const APP_NAME  = 'wedding.jeonchung.2026';
 
+/* ── 네이버 길찾기 ──────────────────────────────
+   nmap://route/public?dlat=..&dlng=..&dname=..&appname=..
+   앱 미설치 시 → 네이버 지도 웹 길찾기로 fallback */
 function naverRoute() {
-  if (!navigator.geolocation) {
-    // GPS 불가 → 목적지만 지정해서 열기
-    openNaverFallback(null, null);
-    return;
-  }
+  const dname = encodeURIComponent(DEST_NAME);
+  const appname = 'wedding.invitation';
 
-  showToast('현재 위치를 확인하는 중...');
-
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      const slat = pos.coords.latitude;
-      const slng = pos.coords.longitude;
-      openNaverRoute(slat, slng);
-    },
-    err => {
-      // 위치 권한 거부 등 → 출발지 없이 목적지만
-      showToast('위치 권한이 없어 목적지만 표시합니다');
-      openNaverFallback(null, null);
-    },
-    { timeout: 8000, maximumAge: 30000 }
-  );
-}
-
-function openNaverRoute(slat, slng) {
-  // nmap:// URL — 앱 설치 시 바로 실행
-  // 공식 문서 기준 대중교통: /route/public (transit → public)
-  const nmapURL = slat
-    ? `nmap://route/public?`
-      + `slat=${slat}&slng=${slng}&sname=${encodeURIComponent('현재위치')}`
-      + `&dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
-      + `&appname=${APP_NAME}`
-    : `nmap://route/public?`
-      + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
-      + `&appname=${APP_NAME}`;
-
-  // Android intent URL (앱 없으면 Play 스토어)
-  const intentURL = `intent://route/public?`
-    + (slat ? `slat=${slat}&slng=${slng}&sname=${encodeURIComponent('현재위치')}&` : '')
-    + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
-    + `&appname=${APP_NAME}`
+  const nmapURL   = `nmap://route/public?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${dname}&appname=${appname}`;
+  const intentURL = `intent://route/public?dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${dname}&appname=${appname}`
     + `#Intent;scheme=nmap;action=android.intent.action.VIEW;`
     + `category=android.intent.category.BROWSABLE;`
     + `package=com.nhn.android.nmap;end`;
-
-  // 웹 fallback URL — 네이버 지도 장소 검색으로 안정적으로 이동
-  const webURL = `https://map.naver.com/p/search/${encodeURIComponent(DEST_NAME)}`;
+  // 웹 fallback: 목적지 좌표로 길찾기 (출발지는 사용자가 지정)
+  const webURL    = `https://map.naver.com/p/directions/-/${DEST_LNG},${DEST_LAT},${dname}/-/transit`;
 
   const ua = navigator.userAgent.toLowerCase();
 
   if (/iphone|ipad|ipod/.test(ua)) {
-    // iOS: nmap:// 시도 → 1.5초 후 미실행이면 앱스토어
     const fallbackTimer = setTimeout(() => {
       window.location.href = 'https://apps.apple.com/kr/app/naver-map-navigation/id311867728';
     }, 1500);
     window.location.href = nmapURL;
     window.addEventListener('blur', () => clearTimeout(fallbackTimer), { once: true });
-
   } else if (/android/.test(ua)) {
-    // Android: intent URL 사용
     window.location.href = intentURL;
-
   } else {
-    // 데스크탑: 웹 URL로 열기
     window.open(webURL, '_blank');
   }
 }
 
-function openNaverFallback(slat, slng) {
-  openNaverRoute(slat, slng);
-}
 
+/* ── 카카오맵 길찾기 ─────────────────────────────
+   kakaomap://route?ep=위도,경도&by=PUBLICTRANSIT
+   앱 미설치 시 → 카카오맵 웹 길찾기로 fallback */
+function kakaoRoute() {
+  const name = encodeURIComponent(DEST_NAME);
 
-/* ══ 카카오맵 지도 열기 (정적 지도 이미지 클릭) ════════════
-   목적: iframe 없이 정적 SVG 지도를 보여주고,
-         클릭 시 카카오맵 앱(또는 웹)으로 해당 위치를 열기
-   URL 구조:
-   - 앱(iOS/Android): kakaomap://look?p=위도,경도
-   - 웹 fallback:     https://map.kakao.com/link/map/장소명,위도,경도
-   - Android intent:  intent://look?p=...#Intent;scheme=kakaomap;...
-════════════════════════════════════════════════ */
-function openKakaoMap(e) {
-  e.preventDefault();
-  const lat = DEST_LAT, lng = DEST_LNG;
-  const name = DEST_NAME;
-
-  const kakaoURL  = `kakaomap://look?p=${lat},${lng}`;
-  const webURL    = `https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}`;
-  const intentURL = `intent://look?p=${lat},${lng}`
+  const kakaoURL  = `kakaomap://route?ep=${DEST_LAT},${DEST_LNG}&by=PUBLICTRANSIT`;
+  const intentURL = `intent://route?ep=${DEST_LAT},${DEST_LNG}&by=PUBLICTRANSIT`
     + `#Intent;scheme=kakaomap;action=android.intent.action.VIEW;`
     + `category=android.intent.category.BROWSABLE;`
     + `package=net.daum.android.map;end`;
+  const webURL    = `https://map.kakao.com/link/to/${name},${DEST_LAT},${DEST_LNG}`;
 
   const ua = navigator.userAgent.toLowerCase();
 
   if (/iphone|ipad|ipod/.test(ua)) {
-    // iOS: 앱 시도 → 1.5초 후 미실행이면 앱스토어
     const t = setTimeout(() => {
       window.location.href = 'https://apps.apple.com/kr/app/kakaomap/id304608425';
     }, 1500);
@@ -1056,73 +1006,34 @@ function openKakaoMap(e) {
   }
 }
 
-/* ══ 카카오맵 길찾기 ════════════════════════════
-   현재 위치 GPS → 목적지(한국프레스센터) 길찾기
-   kakaomap://route?sp=출발위도,출발경도&ep=도착위도,도착경도&by=PUBLICTRANSIT
-   앱 미설치 → 카카오맵 웹으로 fallback
-════════════════════════════════════════════════ */
-function kakaoRoute() {
-  if (!navigator.geolocation) {
-    openKakaoFallback(null, null);
-    return;
-  }
 
-  showToast('현재 위치를 확인하는 중...');
+/* ── 지도 이미지 클릭 → 카카오맵에서 위치 보기 ─────
+   kakaomap://look?p=위도,경도
+   앱 미설치 시 → 카카오맵 웹 지도로 fallback */
+function openKakaoMap(e) {
+  e.preventDefault();
+  const name = encodeURIComponent(DEST_NAME);
 
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      const slat = pos.coords.latitude;
-      const slng = pos.coords.longitude;
-      openKakaoWithCoords(slat, slng);
-    },
-    () => {
-      showToast('위치 권한이 없어 목적지만 표시합니다');
-      openKakaoFallback(null, null);
-    },
-    { timeout: 8000, maximumAge: 30000 }
-  );
-}
-
-function openKakaoWithCoords(slat, slng) {
-  const dlat = DEST_LAT;
-  const dlng = DEST_LNG;
-
-  // kakaomap:// URL scheme (앱 설치 시)
-  const kakaoURL = slat
-    ? `kakaomap://route?sp=${slat},${slng}&ep=${dlat},${dlng}&by=PUBLICTRANSIT`
-    : `kakaomap://route?ep=${dlat},${dlng}&by=PUBLICTRANSIT`;
-
-  // 웹 fallback URL
-  const webURL = slat
-    ? `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${dlat},${dlng}/from/현재위치,${slat},${slng}`
-    : `https://map.kakao.com/link/to/${encodeURIComponent(DEST_NAME)},${dlat},${dlng}`;
+  const kakaoURL  = `kakaomap://look?p=${DEST_LAT},${DEST_LNG}`;
+  const intentURL = `intent://look?p=${DEST_LAT},${DEST_LNG}`
+    + `#Intent;scheme=kakaomap;action=android.intent.action.VIEW;`
+    + `category=android.intent.category.BROWSABLE;`
+    + `package=net.daum.android.map;end`;
+  const webURL    = `https://map.kakao.com/link/map/${name},${DEST_LAT},${DEST_LNG}`;
 
   const ua = navigator.userAgent.toLowerCase();
 
   if (/iphone|ipad|ipod/.test(ua)) {
-    const fallbackTimer = setTimeout(() => {
+    const t = setTimeout(() => {
       window.location.href = 'https://apps.apple.com/kr/app/kakaomap/id304608425';
     }, 1500);
     window.location.href = kakaoURL;
-    window.addEventListener('blur', () => clearTimeout(fallbackTimer), { once: true });
+    window.addEventListener('blur', () => clearTimeout(t), { once: true });
   } else if (/android/.test(ua)) {
-    const intentURL = slat
-      ? `intent://route?sp=${slat},${slng}&ep=${dlat},${dlng}&by=PUBLICTRANSIT`
-        + `#Intent;scheme=kakaomap;action=android.intent.action.VIEW;`
-        + `category=android.intent.category.BROWSABLE;`
-        + `package=net.daum.android.map;end`
-      : `intent://route?ep=${dlat},${dlng}&by=PUBLICTRANSIT`
-        + `#Intent;scheme=kakaomap;action=android.intent.action.VIEW;`
-        + `category=android.intent.category.BROWSABLE;`
-        + `package=net.daum.android.map;end`;
     window.location.href = intentURL;
   } else {
     window.open(webURL, '_blank');
   }
-}
-
-function openKakaoFallback(slat, slng) {
-  openKakaoWithCoords(slat, slng);
 }
 /* ══ 마음 전하기 배너 토글 ════════════════════════════════ */
 function toggleGift() {

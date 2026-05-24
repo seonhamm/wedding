@@ -1043,28 +1043,27 @@ function naverRoute() {
 
 function openNaverRoute(slat, slng) {
   // nmap:// URL — 앱 설치 시 바로 실행
+  // 공식 문서 기준 대중교통: /route/public (transit → public)
   const nmapURL = slat
-    ? `nmap://route/transit?`
-      + `slat=${slat}&slng=${slng}&sname=현재위치`
+    ? `nmap://route/public?`
+      + `slat=${slat}&slng=${slng}&sname=${encodeURIComponent('현재위치')}`
       + `&dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
       + `&appname=${APP_NAME}`
-    : `nmap://route/transit?`
+    : `nmap://route/public?`
       + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
       + `&appname=${APP_NAME}`;
 
   // Android intent URL (앱 없으면 Play 스토어)
-  const intentURL = `intent://route/transit?`
-    + (slat ? `slat=${slat}&slng=${slng}&sname=현재위치&` : '')
+  const intentURL = `intent://route/public?`
+    + (slat ? `slat=${slat}&slng=${slng}&sname=${encodeURIComponent('현재위치')}&` : '')
     + `dlat=${DEST_LAT}&dlng=${DEST_LNG}&dname=${encodeURIComponent(DEST_NAME)}`
     + `&appname=${APP_NAME}`
     + `#Intent;scheme=nmap;action=android.intent.action.VIEW;`
     + `category=android.intent.category.BROWSABLE;`
     + `package=com.nhn.android.nmap;end`;
 
-  // 웹 fallback URL
-  const webURL = slat
-    ? `https://map.naver.com/p/directions/${slat},${slng},현재위치/-/${DEST_LAT},${DEST_LNG},${encodeURIComponent(DEST_NAME)}/transit?c=15,0,0,0,dh`
-    : `https://map.naver.com/p/directions/-/-/${DEST_LAT},${DEST_LNG},${encodeURIComponent(DEST_NAME)}/transit?c=15,0,0,0,dh`;
+  // 웹 fallback URL — 네이버 지도 장소 검색으로 안정적으로 이동
+  const webURL = `https://map.naver.com/p/search/${encodeURIComponent(DEST_NAME)}`;
 
   const ua = navigator.userAgent.toLowerCase();
 

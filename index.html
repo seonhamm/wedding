@@ -586,32 +586,19 @@ footer p {
     <p class="hero-date">2026 · 09 · 05 &nbsp;·&nbsp; 토요일 낮 12시</p>
   </div>
 
-  <!-- 영상 단독 표시 — C 크롭: 위아래 20% 제거 (padding-top: 110%) -->
+  <!-- 메인 사진 -->
   <div style="margin: 0 28px 32px;">
     <div style="
       position: relative;
       width: 100%;
-      padding-top: 110%;
-      background: #1a1a1a;
       border: 1px solid var(--cr);
       overflow: hidden;
     ">
-      <video
-        src="https://seonhamm.github.io/wedding/video_1.MP4"
-        style="
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 177.78%;
-          height: 177.78%;
-          transform: translate(-50%, -50%) rotate(270deg);
-          object-fit: cover;
-          display: block;
-        "
-        autoplay muted loop playsinline preload="auto"
-        crossorigin="anonymous"
-        title="웨딩 영상">
-      </video>
+      <img
+        src="main1.jpg"
+        alt="웨딩 메인 사진"
+        style="width:100%; display:block; object-fit:cover;"
+      >
     </div>
   </div>
 
@@ -855,6 +842,35 @@ footer p {
 
   <!-- 썸네일 행 -->
   <div class="gallery-thumbs" id="galleryThumbs"></div>
+</div>
+
+<!-- ══ 영상 ══════════════════════════════════════════════════ -->
+<div class="sec" style="padding: 0 28px 56px;">
+  <div style="
+    position: relative;
+    width: 100%;
+    padding-top: 110%;
+    background: #1a1a1a;
+    border: 1px solid var(--cr);
+    overflow: hidden;
+  ">
+    <video
+      src="https://seonhamm.github.io/wedding/video_1.MP4"
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 177.78%;
+        height: 177.78%;
+        transform: translate(-50%, -50%) rotate(270deg);
+        object-fit: cover;
+        display: block;
+      "
+      autoplay muted loop playsinline preload="auto"
+      crossorigin="anonymous"
+      title="웨딩 영상">
+    </video>
+  </div>
 </div>
 
 <!-- ══ 공유 ══════════════════════════════════════════════════ -->

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>전선함 ♥ 정혜련 결혼합니다</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
 <style>
 /* ── 리셋 & 기본 ── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,7 +32,7 @@ body {
 ════════════════════════════════════════ */
 .book-hero {
   background: var(--iv);
-  padding: 56px 0 0;
+  padding: 0;
   position: relative;
 }
 
@@ -144,7 +144,21 @@ body {
   color: var(--st); text-transform: uppercase; margin-bottom: 24px;
 }
 .greeting-text {
-  font-size: 13px; line-height: 2.8; color: var(--tp); font-weight: 300;
+  font-size: 14px; line-height: 2.6; color: var(--dk); font-weight: 300;
+}
+.greeting-verse {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px; line-height: 1.9;
+  color: var(--tp); font-weight: 300;
+  margin-top: 28px;
+}
+.greeting-ref {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px; letter-spacing: 1px;
+  color: var(--tp); font-weight: 300;
+  margin-top: 14px;
 }
 
 /* ════════════════════════════════════════
@@ -170,9 +184,9 @@ body {
   color: var(--st); text-transform: uppercase;
 }
 .cal-year {
-  font-family: 'DM Mono', monospace;
-  font-size: 22px; font-weight: 300;
-  color: var(--dk); letter-spacing: 2px; margin-top: 4px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 400;
+  color: var(--dk); letter-spacing: 4px; margin-top: 4px;
 }
 .cal-grid {
   display: grid;
@@ -309,8 +323,50 @@ body {
   background: var(--ww); border: 1px solid var(--cr);
   padding: 18px 12px; text-align: center;
   text-decoration: none; display: block;
+  cursor: pointer;
   transition: all .3s;
 }
+
+/* ── 연락처 선택 시트 ── */
+.contact-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(74,60,48,.35);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  align-items: flex-end; justify-content: center;
+}
+.contact-modal.open { display: flex; }
+.contact-sheet {
+  width: 100%; max-width: 480px;
+  background: var(--iv);
+  border-top-left-radius: 16px; border-top-right-radius: 16px;
+  padding: 28px 24px calc(28px + env(safe-area-inset-bottom));
+  text-align: center;
+  animation: sheetUp .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.contact-sheet-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px; letter-spacing: 3px; color: var(--st);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.contact-sheet-name {
+  font-size: 16px; font-weight: 300; letter-spacing: 2px; color: var(--dk);
+}
+.contact-sheet-tel {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; letter-spacing: 1px; color: var(--tp); margin-top: 6px;
+}
+.contact-sheet-btns {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px;
+}
+.contact-sheet-btn {
+  padding: 15px 0; border: 1px solid var(--cr); background: var(--ww);
+  font-size: 12px; letter-spacing: 2px; color: var(--dk);
+  text-decoration: none; cursor: pointer; transition: all .3s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.contact-sheet-btn:hover { background: var(--dk); color: var(--iv); border-color: var(--dk); }
 .contact-card:hover { background: var(--dk); border-color: var(--dk); }
 .contact-card:hover .c-role,
 .contact-card:hover .c-name,
@@ -338,17 +394,17 @@ body {
   background: var(--ww); overflow: hidden;
 }
 .gift-banner-header {
-  display: flex; justify-content: space-between; align-items: center;
+  position: relative;
+  display: flex; justify-content: center; align-items: center;
   padding: 18px 20px; cursor: pointer;
   user-select: none; -webkit-tap-highlight-color: transparent;
 }
-.gift-banner-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 10px; letter-spacing: 4px;
-  color: var(--st); text-transform: uppercase; display: block; margin-bottom: 4px;
+.gift-banner-title {
+  font-size: 13px; letter-spacing: 4px;
+  color: var(--tp); font-weight: 300;
 }
-.gift-banner-title { font-size: 12px; color: var(--tp); font-weight: 300; }
 .gift-toggle-icon {
+  position: absolute; right: 20px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 20px; color: var(--st);
   transition: transform .35s; flex-shrink: 0;
@@ -375,8 +431,9 @@ body {
 }
 .gift-account-bank { font-size: 11px; color: var(--st); margin-bottom: 2px; }
 .gift-account-num {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px; color: var(--dk); letter-spacing: .5px; line-height: 1.6;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 400;
+  color: var(--dk); letter-spacing: 1px; line-height: 1.5;
 }
 .gift-account-name { font-size: 11px; color: var(--tp); margin-top: 2px; }
 .account-copy {
@@ -425,8 +482,8 @@ body {
 /* 사진 번호 */
 .gallery-counter {
   position: absolute; bottom: 10px; right: 12px;
-  font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing: 1px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 1px;
   color: rgba(255,255,255,.85);
   background: rgba(74,60,48,.45);
   padding: 3px 8px; z-index: 2;
@@ -543,27 +600,31 @@ footer p {
 .lightbox {
   display: none;
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(255,255,255,.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(20,16,12,.93);
   align-items: center; justify-content: center;
   cursor: zoom-out;
+  overflow: hidden;
+  touch-action: none;
 }
 .lightbox.open { display: flex; }
 .lightbox img {
-  max-width: 92vw; max-height: 88vh;
+  max-width: 100vw; max-height: 100vh;
   object-fit: contain;
-  box-shadow: 0 8px 40px rgba(0,0,0,.25);
-  cursor: default;
+  display: block;
+  cursor: zoom-in;
+  transform-origin: center center;
+  transition: transform .25s ease;
+  touch-action: none;
+  will-change: transform;
 }
 .lightbox-close {
   position: absolute; top: 20px; right: 24px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 28px; color: rgba(74,60,48,.7);
-  cursor: pointer; line-height: 1;
+  font-size: 30px; color: rgba(255,255,255,.85);
+  cursor: pointer; line-height: 1; z-index: 2;
   transition: color .2s; user-select: none;
 }
-.lightbox-close:hover { color: var(--dk); }
+.lightbox-close:hover { color: #fff; }
 
 /* ── 토스트 ── */
 .toast {
@@ -580,14 +641,8 @@ footer p {
 
 <!-- ══ HERO — 영상 ═════════════════════════════════════ -->
 <section class="book-hero">
-  <div class="hero-titles">
-    <p class="label-sm">Wedding Invitation</p>
-    <h1 class="hero-names">전선함 <span class="amp">&</span> 정혜련</h1>
-    <p class="hero-date">2026 · 09 · 05 &nbsp;·&nbsp; 토요일 낮 12시</p>
-  </div>
-
   <!-- 메인 사진 -->
-  <div style="margin: 0 28px 32px;">
+  <div style="margin: 36px 28px 36px;">
     <div style="
       position: relative;
       width: 100%;
@@ -600,6 +655,11 @@ footer p {
         style="width:100%; display:block; object-fit:cover;"
       >
     </div>
+  </div>
+
+  <div class="hero-titles">
+    <h1 class="hero-names">전선함 <span class="amp">&</span> 정혜련</h1>
+    <p class="hero-date">2026 · 09 · 05 &nbsp;·&nbsp; 토요일 낮 12시</p>
   </div>
 
   <!-- 슬라이더 구조 유지 (JS 참조용, 화면에 미표시) -->
@@ -693,15 +753,15 @@ footer p {
 
 <!-- ══ 인사말 ═══════════════════════════════════════════════ -->
 <section class="greeting-section sec">
-  <p class="section-label">Greeting</p>
   <p class="greeting-text">
-    서로가 마주보며 다져온 사랑을<br>
-    이제 함께 한 곳을 바라보며<br>
-    걸어가고자 합니다.<br><br>
-    저희 두 사람이 사랑으로 하나 되는 날<br>
-    오셔서 축복해 주시면<br>
-    더없는 기쁨이 되겠습니다.
+    늘 곁에서 아껴주셨던<br>
+    고마운 분들을 모십니다.
   </p>
+  <p class="greeting-verse">
+    “As I have loved you,<br>
+    so you also should love one another.”
+  </p>
+  <p class="greeting-ref">John 13,34</p>
 </section>
 
 <!-- ══ 9월 달력 ══════════════════════════════════════════════ -->
@@ -769,27 +829,29 @@ footer p {
 <div class="contact-section sec">
   <p class="section-label" style="text-align:center; margin-bottom:20px;">Contact</p>
   <div class="contact-grid">
-    <a href="tel:01040142986" class="contact-card">
+    <div class="contact-card" onclick="openContact('전선함','010-4014-2986')">
       <p class="c-role">신랑</p>
       <p class="c-name">전선함</p>
       <p class="c-tel">010-4014-2986</p>
-    </a>
-    <a href="tel:01067220315" class="contact-card">
+    </div>
+    <div class="contact-card" onclick="openContact('정혜련','010-6722-0315')">
       <p class="c-role">신부</p>
       <p class="c-name">정혜련</p>
       <p class="c-tel">010-6722-0315</p>
-    </a>
-    <div class="contact-card" style="cursor:default;">
+    </div>
+    <div class="contact-card" onclick="openContact('전유문','010-3996-2986')">
       <p class="c-role">신랑 부</p>
       <p class="c-name">전유문</p>
+      <p class="c-tel">010-3996-2986</p>
     </div>
     <div class="contact-card" style="cursor:default;">
       <p class="c-role">신부 부</p>
       <p class="c-name">정이섭</p>
     </div>
-    <div class="contact-card" style="cursor:default;">
+    <div class="contact-card" onclick="openContact('홍명의','010-3632-2986')">
       <p class="c-role">신랑 모</p>
       <p class="c-name">홍명의</p>
+      <p class="c-tel">010-3632-2986</p>
     </div>
     <div class="contact-card" style="cursor:default;">
       <p class="c-role">신부 모</p>
@@ -799,10 +861,7 @@ footer p {
     <!-- ── 마음 전하기 와이드 배너 (2열 전체) ── -->
     <div class="gift-banner" id="giftBanner">
       <div class="gift-banner-header" onclick="toggleGift()">
-        <div>
-          <span class="gift-banner-label">Gift</span>
-          <span class="gift-banner-title">마음 전하기</span>
-        </div>
+        <span class="gift-banner-title">마음 전하기</span>
         <span class="gift-toggle-icon">+</span>
       </div>
       <div class="gift-body">
@@ -816,10 +875,10 @@ footer p {
           </div>
           <div class="gift-account">
             <span class="gift-account-role">신부측</span>
-            <div class="gift-account-bank">은행명</div>
-            <div class="gift-account-num">000-000-000000</div>
+            <div class="gift-account-bank">국민은행</div>
+            <div class="gift-account-num">231402-04-257394</div>
             <div class="gift-account-name">예금주 · 정혜련</div>
-            <span class="account-copy" onclick="copyText('000-000-000000')">번호 복사</span>
+            <span class="account-copy" onclick="copyText('231402-04-257394')">번호 복사</span>
           </div>
         </div>
       </div>
@@ -842,35 +901,6 @@ footer p {
 
   <!-- 썸네일 행 -->
   <div class="gallery-thumbs" id="galleryThumbs"></div>
-</div>
-
-<!-- ══ 영상 ══════════════════════════════════════════════════ -->
-<div class="sec" style="padding: 0 28px 56px;">
-  <div style="
-    position: relative;
-    width: 100%;
-    padding-top: 110%;
-    background: #1a1a1a;
-    border: 1px solid var(--cr);
-    overflow: hidden;
-  ">
-    <video
-      src="https://seonhamm.github.io/wedding/video_1.MP4"
-      style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 177.78%;
-        height: 177.78%;
-        transform: translate(-50%, -50%) rotate(270deg);
-        object-fit: cover;
-        display: block;
-      "
-      autoplay muted loop playsinline preload="auto"
-      crossorigin="anonymous"
-      title="웨딩 영상">
-    </video>
-  </div>
 </div>
 
 <!-- ══ 공유 ══════════════════════════════════════════════════ -->
@@ -921,7 +951,20 @@ footer p {
 <!-- ══ 라이트박스 ════════════════════════════════════════════ -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close" onclick="closeLightbox()">✕</span>
-  <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+  <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation(); toggleZoom()">
+</div>
+
+<!-- ══ 연락처 선택 시트 ════════════════════════════════════ -->
+<div class="contact-modal" id="contactModal" onclick="closeContact()">
+  <div class="contact-sheet" onclick="event.stopPropagation()">
+    <p class="contact-sheet-role">Contact</p>
+    <p class="contact-sheet-name" id="contactName"></p>
+    <p class="contact-sheet-tel" id="contactTel"></p>
+    <div class="contact-sheet-btns">
+      <a class="contact-sheet-btn" id="contactCall" onclick="closeContact()">📞 전화걸기</a>
+      <a class="contact-sheet-btn" id="contactSms" onclick="closeContact()">✉️ 문자보내기</a>
+    </div>
+  </div>
 </div>
 
 <!-- ══ 토스트 ════════════════════════════════════════════════ -->
@@ -1144,14 +1187,101 @@ function openLightbox(el) {
   document.getElementById('lightboxImg').src = img.src;
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden'; // 배경 스크롤 잠금
+  resetZoom();                              // 열 때마다 확대 상태 초기화
 }
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
+  resetZoom();
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape') { closeLightbox(); closeContact(); }
 });
+
+/* ══ 라이트박스 확대 / 이동 ══════════════════════════════════
+   maximum-scale=1.0 으로 브라우저 핀치줌이 막혀 있으므로
+   터치 좌표를 직접 읽어 transform(scale·translate)으로 구현.
+   - 사진 탭: 1배 ↔ 2.4배 토글
+   - 두 손가락 핀치: 1~4배 자유 확대/축소
+   - 확대 상태에서 한 손가락 드래그: 이동(팬)
+════════════════════════════════════════════════════════════ */
+let lbScale = 1, lbTx = 0, lbTy = 0;
+function applyLbTransform() {
+  document.getElementById('lightboxImg').style.transform =
+    `translate(${lbTx}px, ${lbTy}px) scale(${lbScale})`;
+}
+function resetZoom() {
+  lbScale = 1; lbTx = 0; lbTy = 0;
+  const img = document.getElementById('lightboxImg');
+  img.style.transition = 'transform .25s ease';
+  applyLbTransform();
+}
+function toggleZoom() {
+  const img = document.getElementById('lightboxImg');
+  img.style.transition = 'transform .25s ease';
+  if (lbScale === 1) { lbScale = 2.4; applyLbTransform(); }
+  else { resetZoom(); }
+}
+(function() {
+  const img = document.getElementById('lightboxImg');
+  let startDist = 0, startScale = 1;
+  let startX = 0, startY = 0, startTx = 0, startTy = 0;
+  let mode = null;
+  const dist = t => Math.hypot(
+    t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+
+  img.addEventListener('touchstart', e => {
+    img.style.transition = 'none';
+    if (e.touches.length === 2) {
+      mode = 'pinch';
+      startDist = dist(e.touches);
+      startScale = lbScale;
+    } else if (e.touches.length === 1 && lbScale > 1) {
+      mode = 'pan';
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      startTx = lbTx; startTy = lbTy;
+    } else {
+      mode = null;
+    }
+  }, { passive: true });
+
+  img.addEventListener('touchmove', e => {
+    if (mode === 'pinch' && e.touches.length === 2) {
+      lbScale = Math.min(4, Math.max(1, startScale * dist(e.touches) / startDist));
+      applyLbTransform();
+    } else if (mode === 'pan' && e.touches.length === 1) {
+      lbTx = startTx + (e.touches[0].clientX - startX);
+      lbTy = startTy + (e.touches[0].clientY - startY);
+      applyLbTransform();
+    }
+  }, { passive: true });
+
+  img.addEventListener('touchend', () => {
+    img.style.transition = 'transform .25s ease';
+    if (lbScale <= 1) resetZoom();
+    mode = null;
+  });
+})();
+
+/* ══ 연락처 선택 시트 ════════════════════════════════════════
+   openContact(name, tel): 카드 탭 시 이름·번호를 시트에 채우고 표시.
+     표시용 번호(하이픈 포함)와 별개로, tel:/sms: 링크에는
+     숫자만 추출해서 넣음 → 휴대폰에서 전화걸기/문자 앱으로 연결.
+   closeContact(): 오버레이 탭·버튼 선택·ESC 로 닫기
+════════════════════════════════════════════════════════════ */
+function openContact(name, tel) {
+  const digits = tel.replace(/[^0-9]/g, '');
+  document.getElementById('contactName').textContent = name;
+  document.getElementById('contactTel').textContent = tel;
+  document.getElementById('contactCall').href = 'tel:' + digits;
+  document.getElementById('contactSms').href = 'sms:' + digits;
+  document.getElementById('contactModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeContact() {
+  document.getElementById('contactModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 /* ══ 슬라이드 갤러리 ═════════════════════════════════════════
    PHOTOS 배열에 사진 파일명만 추가/삭제하면 갤러리가 갱신됨.

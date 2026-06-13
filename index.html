@@ -446,78 +446,47 @@ body {
 }
 
 /* ════════════════════════════════════════
-   슬라이드 갤러리
+   사진 그리드 갤러리
 ════════════════════════════════════════ */
 .gallery-section { padding: 48px 0 56px; }
 .gallery-section .section-label { padding: 0 28px; }
 
-/* 메인 사진 */
-.gallery-main {
-  position: relative;
-  margin: 0 28px 10px;
-  aspect-ratio: 4/5;
+/* 사진 그리드 (3열) */
+.gallery-grid {
+  column-count: 3;
+  column-gap: 6px;
+  padding: 0 28px;
+}
+.gallery-grid-item {
+  break-inside: avoid;
+  margin-bottom: 6px;
   background: linear-gradient(135deg, var(--ww), var(--cr));
   border: 1px solid var(--cr);
   overflow: hidden;
-  cursor: zoom-in;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.gallery-main img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .45s cubic-bezier(.4,0,.2,1);
+.gallery-grid-item img {
+  width: 100%; height: auto; display: block;
   pointer-events: none;
+  transition: transform .4s ease;
 }
-/* 좌우 화살표 */
-.gallery-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 36px; height: 36px;
-  background: rgba(255,255,255,.75);
-  border: 1px solid var(--cr);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 14px; color: var(--dk);
-  transition: background .2s; z-index: 2;
-  user-select: none; -webkit-tap-highlight-color: transparent;
-}
-.gallery-arrow:hover { background: var(--ww); }
-.gallery-arrow.prev { left: 10px; }
-.gallery-arrow.next { right: 10px; }
-/* 사진 번호 */
-.gallery-counter {
-  position: absolute; bottom: 10px; right: 12px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px; letter-spacing: 1px;
-  color: rgba(255,255,255,.85);
-  background: rgba(74,60,48,.45);
-  padding: 3px 8px; z-index: 2;
-}
+.gallery-grid-item:hover img { transform: scale(1.05); }
+.gallery-grid-item.hidden { display: none; }
 
-/* 썸네일 행 */
-.gallery-thumbs {
-  display: flex; gap: 6px;
-  padding: 0 28px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+/* 사진 더보기 버튼 */
+.gallery-more-wrap {
+  text-align: center; padding: 0 28px; margin-top: 20px;
 }
-.gallery-thumbs::-webkit-scrollbar { display: none; }
-.gallery-thumb {
-  flex-shrink: 0;
-  width: 64px; height: 80px;
-  background: linear-gradient(135deg, var(--ww), var(--cr));
-  border: 1px solid var(--cr);
-  overflow: hidden; cursor: pointer;
-  scroll-snap-align: start;
-  transition: border-color .2s, opacity .2s;
-  opacity: .55;
+.gallery-more-btn {
+  background: var(--ww); border: 1px solid var(--cr);
+  color: var(--tp); cursor: pointer;
+  padding: 13px 32px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px; letter-spacing: 3px;
+  transition: all .3s; -webkit-tap-highlight-color: transparent;
 }
-.gallery-thumb.active {
-  border-color: var(--gd);
-  opacity: 1;
-}
-.gallery-thumb img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  pointer-events: none;
-}
+.gallery-more-btn:hover { background: var(--dk); color: var(--iv); border-color: var(--dk); }
 
 /* ════════════════════════════════════════
    공유 섹션
@@ -596,36 +565,61 @@ footer p {
 }
 
 /* ════════════════════════════════════════
-   라이트박스 (사진 전체화면 보기)
+   사진 뷰어 (전체화면 보기)
 ════════════════════════════════════════ */
-.lightbox {
+.viewer {
   display: none;
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(20,16,12,.93);
+  background: rgba(20,16,12,.95);
+  flex-direction: column;
   align-items: center; justify-content: center;
   cursor: zoom-out;
   overflow: hidden;
-  touch-action: none;
 }
-.lightbox.open { display: flex; }
-.lightbox img {
-  max-width: 100vw; max-height: 100vh;
+.viewer.open { display: flex; }
+.viewer-stage {
+  flex: 1;
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.viewer-stage img {
+  max-width: 100vw; max-height: 78vh;
   object-fit: contain;
   display: block;
-  cursor: zoom-in;
-  transform-origin: center center;
-  transition: transform .25s ease;
-  touch-action: none;
-  will-change: transform;
+  user-select: none; -webkit-user-drag: none;
+  transition: opacity .2s ease;
 }
-.lightbox-close {
+.viewer-close {
   position: absolute; top: 20px; right: 24px;
   font-family: 'Cormorant Garamond', serif;
   font-size: 30px; color: rgba(255,255,255,.85);
   cursor: pointer; line-height: 1; z-index: 2;
   transition: color .2s; user-select: none;
 }
-.lightbox-close:hover { color: #fff; }
+.viewer-close:hover { color: #fff; }
+/* 하단 내비게이션 바 */
+.viewer-bar {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  gap: 20px;
+  padding: 22px 24px calc(28px + env(safe-area-inset-bottom));
+}
+.viewer-btn {
+  background: none; border: 1px solid rgba(255,255,255,.4);
+  color: rgba(255,255,255,.9); cursor: pointer;
+  padding: 11px 22px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; letter-spacing: 2px;
+  transition: all .25s; -webkit-tap-highlight-color: transparent;
+}
+.viewer-btn:hover { background: rgba(255,255,255,.15); }
+.viewer-counter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; letter-spacing: 2px;
+  color: rgba(255,255,255,.7); min-width: 52px; text-align: center;
+}
 
 /* ── 토스트 ── */
 .toast {
@@ -829,62 +823,31 @@ footer p {
 <!-- ══ 연락처 ════════════════════════════════════════════════ -->
 <div class="contact-section sec">
   <p class="section-label" style="text-align:center; margin-bottom:20px;">Contact</p>
-  <div class="contact-grid">
-    <div class="contact-card" onclick="openContact('전선함','010-4014-2986')">
-      <p class="c-role">신랑</p>
-      <p class="c-name">전선함</p>
-      <p class="c-tel">010-4014-2986</p>
-    </div>
-    <div class="contact-card" onclick="openContact('정혜련','010-6722-0315')">
-      <p class="c-role">신부</p>
-      <p class="c-name">정혜련</p>
-      <p class="c-tel">010-6722-0315</p>
-    </div>
-    <div class="contact-card" onclick="openContact('전유문','010-3996-2986')">
-      <p class="c-role">신랑 부</p>
-      <p class="c-name">전유문</p>
-      <p class="c-tel">010-3996-2986</p>
-    </div>
-    <div class="contact-card" style="cursor:default;">
-      <p class="c-role">신부 부</p>
-      <p class="c-name">정이섭</p>
-    </div>
-    <div class="contact-card" onclick="openContact('홍명의','010-3632-2986')">
-      <p class="c-role">신랑 모</p>
-      <p class="c-name">홍명의</p>
-      <p class="c-tel">010-3632-2986</p>
-    </div>
-    <div class="contact-card" style="cursor:default;">
-      <p class="c-role">신부 모</p>
-      <p class="c-name">하미정</p>
-    </div>
 
-    <!-- ── 마음 전하기 와이드 배너 (2열 전체) ── -->
-    <div class="gift-banner" id="giftBanner">
-      <div class="gift-banner-header" onclick="toggleGift()">
-        <span class="gift-banner-title">마음 전하기</span>
-        <span class="gift-toggle-icon">+</span>
-      </div>
-      <div class="gift-body">
-        <div class="gift-inner">
-          <div class="gift-account">
-            <span class="gift-account-role">신랑측</span>
-            <div class="gift-account-bank">국민은행</div>
-            <div class="gift-account-num">734002-00-040783</div>
-            <div class="gift-account-name">예금주 · 전선함</div>
-            <span class="account-copy" onclick="copyText('734002-00-040783')">번호 복사</span>
-          </div>
-          <div class="gift-account">
-            <span class="gift-account-role">신부측</span>
-            <div class="gift-account-bank">국민은행</div>
-            <div class="gift-account-num">231402-04-257394</div>
-            <div class="gift-account-name">예금주 · 정혜련</div>
-            <span class="account-copy" onclick="copyText('231402-04-257394')">번호 복사</span>
-          </div>
+  <!-- ── 마음 전하기 ── -->
+  <div class="gift-banner" id="giftBanner">
+    <div class="gift-banner-header" onclick="toggleGift()">
+      <span class="gift-banner-title">마음 전하기</span>
+      <span class="gift-toggle-icon">+</span>
+    </div>
+    <div class="gift-body">
+      <div class="gift-inner">
+        <div class="gift-account">
+          <span class="gift-account-role">신랑측</span>
+          <div class="gift-account-bank">국민은행</div>
+          <div class="gift-account-num">734002-00-040783</div>
+          <div class="gift-account-name">예금주 · 전선함</div>
+          <span class="account-copy" onclick="copyText('734002-00-040783')">번호 복사</span>
+        </div>
+        <div class="gift-account">
+          <span class="gift-account-role">신부측</span>
+          <div class="gift-account-bank">국민은행</div>
+          <div class="gift-account-num">231402-04-257394</div>
+          <div class="gift-account-name">예금주 · 정혜련</div>
+          <span class="account-copy" onclick="copyText('231402-04-257394')">번호 복사</span>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -892,16 +855,13 @@ footer p {
 <div class="gallery-section sec">
   <p class="section-label" style="text-align:center; margin-bottom:16px;">Gallery</p>
 
-  <!-- 메인 사진 -->
-  <div class="gallery-main" id="galleryMain" onclick="openLightbox(this)">
-    <img id="galleryMainImg" src="photo1.jpg" alt="웨딩 사진">
-    <div class="gallery-arrow prev" onclick="event.stopPropagation(); moveGallery(-1)">&#8249;</div>
-    <div class="gallery-arrow next" onclick="event.stopPropagation(); moveGallery(1)">&#8250;</div>
-    <div class="gallery-counter" id="galleryCounter">1 / 6</div>
-  </div>
+  <!-- 사진 그리드 (처음 9장 표시) -->
+  <div class="gallery-grid" id="galleryGrid"></div>
 
-  <!-- 썸네일 행 -->
-  <div class="gallery-thumbs" id="galleryThumbs"></div>
+  <!-- 사진 더보기 (9장 초과 시에만 노출) -->
+  <div class="gallery-more-wrap" id="galleryMoreWrap" style="display:none;">
+    <button class="gallery-more-btn" onclick="expandGallery()">사진 더보기</button>
+  </div>
 </div>
 
 <!-- ══ 공유 ══════════════════════════════════════════════════ -->
@@ -949,10 +909,17 @@ footer p {
   <p>Jeon &amp; Chung · September 2026</p>
 </footer>
 
-<!-- ══ 라이트박스 ════════════════════════════════════════════ -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
-  <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation(); toggleZoom()">
+<!-- ══ 사진 뷰어 (전체화면) ══════════════════════════════════ -->
+<div class="viewer" id="viewer" onclick="closeViewer(event)">
+  <span class="viewer-close" onclick="closeViewer()">✕</span>
+  <div class="viewer-stage" id="viewerStage" onclick="event.stopPropagation()">
+    <img id="viewerImg" src="" alt="">
+  </div>
+  <div class="viewer-bar" onclick="event.stopPropagation()">
+    <button class="viewer-btn" onclick="viewerMove(-1)">‹ 이전</button>
+    <span class="viewer-counter" id="viewerCounter"></span>
+    <button class="viewer-btn" onclick="viewerMove(1)">다음 ›</button>
+  </div>
 </div>
 
 <!-- ══ 연락처 선택 시트 ════════════════════════════════════ -->
@@ -1176,93 +1143,58 @@ function toggleGift() {
   document.getElementById('giftBanner').classList.toggle('open');
 }
 
-/* ══ 라이트박스 ══════════════════════════════════════════════
-   openLightbox(el): el이 .gallery-item 컨테이너든 img든
-     내부/자신의 img를 찾아 src를 라이트박스에 넣고 표시.
-     (모바일 터치는 컨테이너에서 잡히므로 컨테이너 기준으로 처리)
-   closeLightbox(): 오버레이·✕·ESC 로 닫기
+/* ══ 사진 뷰어 (전체화면) ════════════════════════════════════
+   openViewer(idx): 해당 인덱스 사진을 전체화면으로 표시
+   viewerMove(dir): 하단 버튼 또는 스와이프로 이전/다음 사진 전환
+   closeViewer(): 오버레이·✕·ESC 로 닫기
+   ※ 추가 확대(핀치/탭 줌)는 없음
 ════════════════════════════════════════════════════════════ */
-function openLightbox(el) {
-  const img = el.tagName === 'IMG' ? el : el.querySelector('img');
-  if (!img) return;
-  document.getElementById('lightboxImg').src = img.src;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden'; // 배경 스크롤 잠금
-  resetZoom();                              // 열 때마다 확대 상태 초기화
+let viewerIdx = 0;
+function openViewer(idx) {
+  viewerIdx = idx;
+  updateViewer();
+  document.getElementById('viewer').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
+function closeViewer(e) {
+  document.getElementById('viewer').classList.remove('open');
   document.body.style.overflow = '';
-  resetZoom();
+}
+function updateViewer() {
+  const p = PHOTOS[viewerIdx];
+  const img = document.getElementById('viewerImg');
+  img.src = p.src; img.alt = p.alt;
+  document.getElementById('viewerCounter').textContent =
+    `${viewerIdx + 1} / ${PHOTOS.length}`;
+}
+function viewerMove(dir) {
+  viewerIdx = (viewerIdx + dir + PHOTOS.length) % PHOTOS.length;
+  updateViewer();
 }
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeLightbox(); closeContact(); }
+  if (e.key === 'Escape') { closeViewer(); closeContact(); }
+  if (document.getElementById('viewer').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  viewerMove(-1);
+    if (e.key === 'ArrowRight') viewerMove(1);
+  }
 });
-
-/* ══ 라이트박스 확대 / 이동 ══════════════════════════════════
-   maximum-scale=1.0 으로 브라우저 핀치줌이 막혀 있으므로
-   터치 좌표를 직접 읽어 transform(scale·translate)으로 구현.
-   - 사진 탭: 1배 ↔ 2.4배 토글
-   - 두 손가락 핀치: 1~4배 자유 확대/축소
-   - 확대 상태에서 한 손가락 드래그: 이동(팬)
-════════════════════════════════════════════════════════════ */
-let lbScale = 1, lbTx = 0, lbTy = 0;
-function applyLbTransform() {
-  document.getElementById('lightboxImg').style.transform =
-    `translate(${lbTx}px, ${lbTy}px) scale(${lbScale})`;
-}
-function resetZoom() {
-  lbScale = 1; lbTx = 0; lbTy = 0;
-  const img = document.getElementById('lightboxImg');
-  img.style.transition = 'transform .25s ease';
-  applyLbTransform();
-}
-function toggleZoom() {
-  const img = document.getElementById('lightboxImg');
-  img.style.transition = 'transform .25s ease';
-  if (lbScale === 1) { lbScale = 2.4; applyLbTransform(); }
-  else { resetZoom(); }
-}
+// 전체화면에서 좌우 스와이프로 사진 전환
 (function() {
-  const img = document.getElementById('lightboxImg');
-  let startDist = 0, startScale = 1;
-  let startX = 0, startY = 0, startTx = 0, startTy = 0;
-  let mode = null;
-  const dist = t => Math.hypot(
-    t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-
-  img.addEventListener('touchstart', e => {
-    img.style.transition = 'none';
-    if (e.touches.length === 2) {
-      mode = 'pinch';
-      startDist = dist(e.touches);
-      startScale = lbScale;
-    } else if (e.touches.length === 1 && lbScale > 1) {
-      mode = 'pan';
-      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      startTx = lbTx; startTy = lbTy;
-    } else {
-      mode = null;
+  let sx = 0, sy = 0;
+  const stage = document.getElementById('viewerStage');
+  stage.addEventListener('touchstart', e => {
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    // 가로 스와이프가 세로보다 클 때만 사진 전환
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      viewerMove(dx < 0 ? 1 : -1);
     }
   }, { passive: true });
-
-  img.addEventListener('touchmove', e => {
-    if (mode === 'pinch' && e.touches.length === 2) {
-      lbScale = Math.min(4, Math.max(1, startScale * dist(e.touches) / startDist));
-      applyLbTransform();
-    } else if (mode === 'pan' && e.touches.length === 1) {
-      lbTx = startTx + (e.touches[0].clientX - startX);
-      lbTy = startTy + (e.touches[0].clientY - startY);
-      applyLbTransform();
-    }
-  }, { passive: true });
-
-  img.addEventListener('touchend', () => {
-    img.style.transition = 'transform .25s ease';
-    if (lbScale <= 1) resetZoom();
-    mode = null;
-  });
 })();
+
 
 /* ══ 연락처 선택 시트 ════════════════════════════════════════
    openContact(name, tel): 카드 탭 시 이름·번호를 시트에 채우고 표시.
@@ -1284,12 +1216,12 @@ function closeContact() {
   document.body.style.overflow = '';
 }
 
-/* ══ 슬라이드 갤러리 ═════════════════════════════════════════
+/* ══ 그리드 갤러리 ═══════════════════════════════════════════
    PHOTOS 배열에 사진 파일명만 추가/삭제하면 갤러리가 갱신됨.
    구조:
-   - 메인 사진: moveGallery(±1) 또는 스와이프로 전환
-   - 썸네일: 클릭 시 해당 사진을 메인으로 올림 + 활성 강조
-   - 메인 클릭: openLightbox()로 전달 (기존 라이트박스 재사용)
+   - 처음 9장만 그리드에 표시, 나머지는 .hidden 처리
+   - 9장 초과 시 '사진 더보기' 버튼 노출 → expandGallery()로 전체 표시
+   - 각 사진 클릭 → openViewer(i)로 전체화면 보기
 ════════════════════════════════════════════════════════════ */
 const PHOTOS = [
   { src: 'photo1.jpg', alt: '웨딩 사진 1' },
@@ -1300,67 +1232,35 @@ const PHOTOS = [
   { src: 'photo6.jpg', alt: '웨딩 사진 6' },
 ];
 
-let galIdx = 0;
+const GALLERY_PREVIEW = 9;   // 처음에 보여줄 사진 수
 
-function initGallery() {
-  const thumbWrap = document.getElementById('galleryThumbs');
-  thumbWrap.innerHTML = '';
+function buildGallery() {
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
 
   PHOTOS.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'gallery-thumb' + (i === 0 ? ' active' : '');
-    div.onclick = () => setGallery(i);
+    div.className = 'gallery-grid-item' + (i >= GALLERY_PREVIEW ? ' hidden' : '');
+    div.onclick = () => openViewer(i);
     const img = document.createElement('img');
-    img.src = p.src; img.alt = p.alt;
+    img.src = p.src; img.alt = p.alt; img.loading = 'lazy';
     div.appendChild(img);
-    thumbWrap.appendChild(div);
+    grid.appendChild(div);
   });
 
-  setGallery(0, false);
+  // 9장 초과일 때만 '사진 더보기' 버튼 노출
+  document.getElementById('galleryMoreWrap').style.display =
+    PHOTOS.length > GALLERY_PREVIEW ? 'block' : 'none';
 }
 
-function setGallery(idx, scroll = true) {
-  galIdx = (idx + PHOTOS.length) % PHOTOS.length;
-  const p = PHOTOS[galIdx];
-
-  // 메인 이미지 교체
-  const mainImg = document.getElementById('galleryMainImg');
-  mainImg.src = p.src;
-  mainImg.alt = p.alt;
-
-  // 카운터 갱신
-  document.getElementById('galleryCounter').textContent =
-    `${galIdx + 1} / ${PHOTOS.length}`;
-
-  // 썸네일 활성 상태 갱신
-  document.querySelectorAll('.gallery-thumb').forEach((el, i) => {
-    el.classList.toggle('active', i === galIdx);
-  });
-
-  // 활성 썸네일이 보이도록 스크롤
-  if (scroll) {
-    const thumbs = document.getElementById('galleryThumbs');
-    const active = thumbs.children[galIdx];
-    if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  }
+function expandGallery() {
+  document.querySelectorAll('.gallery-grid-item.hidden')
+    .forEach(el => el.classList.remove('hidden'));
+  document.getElementById('galleryMoreWrap').style.display = 'none';
 }
 
-function moveGallery(dir) {
-  setGallery(galIdx + dir);
-}
+buildGallery();
 
-// 메인 사진 스와이프 지원
-(function() {
-  let sx = 0;
-  const el = document.getElementById('galleryMain');
-  el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-  el.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 40) moveGallery(dx < 0 ? 1 : -1);
-  }, { passive: true });
-})();
-
-initGallery();
 
 
 function copyText(text) {

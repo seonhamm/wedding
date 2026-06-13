@@ -562,6 +562,7 @@ footer p {
 }
 .viewer.open { display: flex; }
 .viewer-stage {
+  position: relative;
   flex: 1;
   width: 100%;
   display: flex; align-items: center; justify-content: center;
@@ -575,6 +576,18 @@ footer p {
   user-select: none; -webkit-user-drag: none;
   transition: opacity .2s ease;
 }
+.viewer-spinner {
+  position: absolute;
+  width: 30px; height: 30px;
+  border: 2px solid rgba(255,255,255,.25);
+  border-top-color: rgba(255,255,255,.85);
+  border-radius: 50%;
+  opacity: 0; transition: opacity .2s ease;
+  animation: vspin .8s linear infinite;
+  pointer-events: none;
+}
+.viewer-stage.loading .viewer-spinner { opacity: 1; transition-delay: .15s; }
+@keyframes vspin { to { transform: rotate(360deg); } }
 .viewer-close {
   position: absolute; top: 20px; right: 24px;
   font-family: 'Cormorant Garamond', serif;
@@ -892,7 +905,8 @@ footer p {
 <div class="viewer" id="viewer" onclick="closeViewer(event)">
   <span class="viewer-close" onclick="closeViewer()">✕</span>
   <div class="viewer-stage" id="viewerStage" onclick="event.stopPropagation()">
-    <img id="viewerImg" src="" alt="">
+    <div class="viewer-spinner" aria-hidden="true"></div>
+    <img id="viewerImg" src="" alt="" decoding="async">
   </div>
   <div class="viewer-bar" onclick="event.stopPropagation()">
     <button class="viewer-btn" onclick="viewerMove(-1)" aria-label="이전 사진">&#8249;</button>
@@ -1135,9 +1149,38 @@ function closeViewer(e) {
 function updateViewer() {
   const p = PHOTOS[viewerIdx];
   const img = document.getElementById('viewerImg');
-  img.src = p.src; img.alt = p.alt;
+  const stage = document.getElementById('viewerStage');
+
   document.getElementById('viewerCounter').textContent =
     `${viewerIdx + 1} / ${PHOTOS.length}`;
+
+  // 새 사진을 백그라운드로 먼저 받아둠.
+  // 다 받기 전까지는 이전 사진을 그대로 두고(빈 화면 방지),
+  // 받는 데 시간이 걸리면 스피너 표시. 완료되면 즉시 교체.
+  stage.classList.add('loading');
+  const loader = new Image();
+  loader.onload = () => {
+    img.src = p.src; img.alt = p.alt;
+    stage.classList.remove('loading');
+  };
+  loader.onerror = () => stage.classList.remove('loading');
+  loader.src = p.src;
+
+  preloadNeighbors();
+}
+
+// 이전/다음 사진을 미리 받아두어 넘길 때 바로 뜨게 함
+const _preloaded = new Set();
+function preloadNeighbors() {
+  [viewerIdx - 1, viewerIdx + 1].forEach(i => {
+    const idx = (i + PHOTOS.length) % PHOTOS.length;
+    const src = PHOTOS[idx].src;
+    if (!_preloaded.has(src)) {
+      _preloaded.add(src);
+      const im = new Image();
+      im.src = src;
+    }
+  });
 }
 function viewerMove(dir) {
   viewerIdx = (viewerIdx + dir + PHOTOS.length) % PHOTOS.length;

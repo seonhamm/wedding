@@ -457,59 +457,26 @@ body {
 }
 
 /* ════════════════════════════════════════
-   사진 그리드 갤러리
+   갤러리 (대표 사진 1장)
 ════════════════════════════════════════ */
 .gallery-section { padding: 48px 0 56px; }
-.gallery-section .section-label { padding: 0 28px; }
 
-/* 사진 그리드 (3열) */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  grid-auto-flow: dense;
-  padding: 0 28px;
-}
-.gallery-grid-item {
-  aspect-ratio: 1;
+.gallery-cover {
+  position: relative;
+  margin: 0 28px;
+  aspect-ratio: 4/5;
   background: linear-gradient(135deg, var(--ww), var(--cr));
   border: 1px solid var(--cr);
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.gallery-grid-item.feature {
-  grid-column: span 2;
-  grid-row: span 2;
-  aspect-ratio: auto;
-}
-.gallery-grid-item img {
+.gallery-cover img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   pointer-events: none;
-  transition: transform .4s ease;
+  transition: transform .5s ease;
 }
-.gallery-grid-item:hover img { transform: scale(1.05); }
-.gallery-grid-item.hidden { display: none; }
-
-/* 사진 더보기 버튼 */
-.gallery-more-wrap {
-  text-align: center; padding: 0 28px; margin-top: 20px;
-}
-.gallery-more-btn {
-  background: none; border: none;
-  color: var(--tp); cursor: pointer;
-  padding: 8px 8px;
-  font-family: 'Noto Serif KR', serif;
-  font-size: 13px; letter-spacing: 2px; font-weight: 300;
-  display: inline-flex; align-items: center; gap: 7px;
-  transition: color .3s; -webkit-tap-highlight-color: transparent;
-}
-.gallery-more-btn:hover { color: var(--dk); }
-.gallery-more-btn .more-arrow {
-  display: inline-block; transform: rotate(90deg);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px; line-height: 1;
-}
+.gallery-cover:hover img { transform: scale(1.04); }
 
 /* ════════════════════════════════════════
    공유 섹션
@@ -883,13 +850,9 @@ footer p {
 
 <!-- ══ 갤러리 ════════════════════════════════════════════════ -->
 <div class="gallery-section sec">
-
-  <!-- 사진 그리드 (처음 9장 표시) -->
-  <div class="gallery-grid" id="galleryGrid"></div>
-
-  <!-- 사진 더보기 (9장 초과 시에만 노출) -->
-  <div class="gallery-more-wrap" id="galleryMoreWrap" style="display:none;">
-    <button class="gallery-more-btn" onclick="expandGallery()">사진 더보기<span class="more-arrow">&#8250;</span></button>
+  <!-- 대표 사진 1장 — 누르면 전체화면 뷰어로 전체 사진 보기 -->
+  <div class="gallery-cover" onclick="openViewer(0)">
+    <img id="galleryCoverImg" src="gallery_01.jpg" alt="웨딩 사진">
   </div>
 </div>
 
@@ -1256,14 +1219,10 @@ function closeContact() {
   document.body.style.overflow = '';
 }
 
-/* ══ 매거진형 그리드 갤러리 ══════════════════════════════════
-   PHOTOS 배열에 사진 파일명만 추가/삭제하면 갤러리가 갱신됨.
-   구조:
-   - 3열 그리드, FEATURE_EVERY 번째마다 2×2 큰 타일(매거진 포인트)
-   - 처음 GALLERY_PREVIEW 장만 표시, 나머지는 .hidden 처리
-   - GALLERY_PREVIEW 초과 시 '사진 더보기' 버튼 노출
-   - 각 사진 클릭 → openViewer(i)로 전체화면 보기
-   ※ 사진 16장 예상: 5번째마다 큰 사진(0·5·10·15) → 4개의 포인트 타일
+/* ══ 갤러리 (대표 1장 + 전체화면 뷰어) ═══════════════════════
+   PHOTOS 배열에 사진 파일명만 추가/삭제하면 됨.
+   - 대표 사진(PHOTOS[0])만 화면에 표시
+   - 누르면 openViewer(0) → 전체화면에서 스와이프/화살표로 전체 사진 열람
 ════════════════════════════════════════════════════════════ */
 const PHOTOS = [
   { src: 'gallery_01.jpg', alt: '웨딩 사진 1' },
@@ -1288,34 +1247,10 @@ const PHOTOS = [
   { src: 'gallery_20.jpg', alt: '웨딩 사진 20' },
 ];
 
-const GALLERY_PREVIEW = 9;   // 처음에 보여줄 사진 수
-const FEATURE_EVERY = 5;     // 큰 타일(2×2) 주기 — n번째마다 강조
-
 function buildGallery() {
-  const grid = document.getElementById('galleryGrid');
-  grid.innerHTML = '';
-
-  PHOTOS.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'gallery-grid-item'
-      + (i % FEATURE_EVERY === 0 ? ' feature' : '')
-      + (i >= GALLERY_PREVIEW ? ' hidden' : '');
-    div.onclick = () => openViewer(i);
-    const img = document.createElement('img');
-    img.src = p.src; img.alt = p.alt; img.loading = 'lazy';
-    div.appendChild(img);
-    grid.appendChild(div);
-  });
-
-  // 9장 초과일 때만 '사진 더보기' 버튼 노출
-  document.getElementById('galleryMoreWrap').style.display =
-    PHOTOS.length > GALLERY_PREVIEW ? 'block' : 'none';
-}
-
-function expandGallery() {
-  document.querySelectorAll('.gallery-grid-item.hidden')
-    .forEach(el => el.classList.remove('hidden'));
-  document.getElementById('galleryMoreWrap').style.display = 'none';
+  const cover = document.getElementById('galleryCoverImg');
+  cover.src = PHOTOS[0].src;
+  cover.alt = PHOTOS[0].alt;
 }
 
 buildGallery();

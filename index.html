@@ -1196,6 +1196,18 @@ document.addEventListener('keydown', e => {
       viewerMove(dx < 0 ? 1 : -1);
     }
   }, { passive: true });
+
+  // 뷰어 안에서 핀치 확대 차단
+  // (iOS Safari는 maximum-scale/touch-action을 무시하므로 직접 막아야 함)
+  const viewer = document.getElementById('viewer');
+  // 두 손가락 이상의 touchmove는 기본 동작(핀치 줌) 취소
+  viewer.addEventListener('touchmove', e => {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  // iOS Safari 전용 제스처 이벤트(핀치) 취소
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => {
+    viewer.addEventListener(ev, e => e.preventDefault());
+  });
 })();
 
 

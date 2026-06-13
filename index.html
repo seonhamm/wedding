@@ -244,12 +244,6 @@ body {
   color: var(--iv);
   z-index: 1;
 }
-.cal-wedding-label {
-  font-size: 7px; letter-spacing: 0;
-  color: var(--gd); margin-top: 2px;
-  font-family: 'Cormorant Garamond', serif;
-  white-space: nowrap;
-}
 .cal-footer {
   margin-top: 20px; text-align: center;
   font-family: 'Cormorant Garamond', serif;
@@ -851,8 +845,8 @@ footer p {
 <!-- ══ 갤러리 ════════════════════════════════════════════════ -->
 <div class="gallery-section sec">
   <!-- 대표 사진 1장 — 누르면 전체화면 뷰어로 전체 사진 보기 -->
-  <div class="gallery-cover" onclick="openViewer(0)">
-    <img id="galleryCoverImg" src="gallery_01.jpg" alt="웨딩 사진">
+  <div class="gallery-cover" id="galleryCover">
+    <img id="galleryCoverImg" src="gallery_03.jpg" alt="웨딩 사진">
   </div>
 </div>
 
@@ -1040,13 +1034,6 @@ sliderEl.addEventListener('mouseup', e => {
     numEl.textContent = day;
     el.appendChild(numEl);
 
-    if (day === WEDDING_DAY) {
-      const label = document.createElement('div');
-      label.className = 'cal-wedding-label';
-      label.textContent = '♥ 결혼식';
-      el.appendChild(label);
-    }
-
     grid.appendChild(el);
   }
 })();
@@ -1221,8 +1208,8 @@ function closeContact() {
 
 /* ══ 갤러리 (대표 1장 + 전체화면 뷰어) ═══════════════════════
    PHOTOS 배열에 사진 파일명만 추가/삭제하면 됨.
-   - 대표 사진(PHOTOS[0])만 화면에 표시
-   - 누르면 openViewer(0) → 전체화면에서 스와이프/화살표로 전체 사진 열람
+   - 대표 사진(PHOTOS[COVER_INDEX])만 화면에 표시  (0=1번, 2=3번)
+   - 누르면 그 사진부터 전체화면 뷰어로 스와이프/화살표 열람
 ════════════════════════════════════════════════════════════ */
 const PHOTOS = [
   { src: 'gallery_01.jpg', alt: '웨딩 사진 1' },
@@ -1247,10 +1234,13 @@ const PHOTOS = [
   { src: 'gallery_20.jpg', alt: '웨딩 사진 20' },
 ];
 
+const COVER_INDEX = 2;   // 대표 사진 (0=1번 … 2=3번)
+
 function buildGallery() {
   const cover = document.getElementById('galleryCoverImg');
-  cover.src = PHOTOS[0].src;
-  cover.alt = PHOTOS[0].alt;
+  cover.src = PHOTOS[COVER_INDEX].src;
+  cover.alt = PHOTOS[COVER_INDEX].alt;
+  document.getElementById('galleryCover').onclick = () => openViewer(COVER_INDEX);
 }
 
 buildGallery();

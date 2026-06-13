@@ -136,7 +136,7 @@ body {
    인사말
 ════════════════════════════════════════ */
 .greeting-section {
-  padding: 56px 32px;
+  padding: 56px 32px 30px;
   text-align: center;
 }
 .section-label {
@@ -160,6 +160,17 @@ body {
   font-size: 12px; letter-spacing: 1px;
   color: var(--tp); font-weight: 300;
   margin-top: 14px;
+}
+.greeting-family {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid var(--cr);
+  font-size: 13px; line-height: 2.4;
+  color: var(--tp); font-weight: 300;
+}
+.greeting-family .gf-rel { color: var(--st); margin: 0 2px; }
+.greeting-family .gf-name {
+  color: var(--dk); letter-spacing: 2px; margin-left: 4px;
 }
 
 /* ════════════════════════════════════════
@@ -453,21 +464,27 @@ body {
 
 /* 사진 그리드 (3열) */
 .gallery-grid {
-  column-count: 3;
-  column-gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  grid-auto-flow: dense;
   padding: 0 28px;
 }
 .gallery-grid-item {
-  break-inside: avoid;
-  margin-bottom: 6px;
+  aspect-ratio: 1;
   background: linear-gradient(135deg, var(--ww), var(--cr));
   border: 1px solid var(--cr);
   overflow: hidden;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+.gallery-grid-item.feature {
+  grid-column: span 2;
+  grid-row: span 2;
+  aspect-ratio: auto;
+}
 .gallery-grid-item img {
-  width: 100%; height: auto; display: block;
+  width: 100%; height: 100%; object-fit: cover; display: block;
   pointer-events: none;
   transition: transform .4s ease;
 }
@@ -479,14 +496,20 @@ body {
   text-align: center; padding: 0 28px; margin-top: 20px;
 }
 .gallery-more-btn {
-  background: var(--ww); border: 1px solid var(--cr);
+  background: none; border: none;
   color: var(--tp); cursor: pointer;
-  padding: 13px 32px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 12px; letter-spacing: 3px;
-  transition: all .3s; -webkit-tap-highlight-color: transparent;
+  padding: 8px 8px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13px; letter-spacing: 2px; font-weight: 300;
+  display: inline-flex; align-items: center; gap: 7px;
+  transition: color .3s; -webkit-tap-highlight-color: transparent;
 }
-.gallery-more-btn:hover { background: var(--dk); color: var(--iv); border-color: var(--dk); }
+.gallery-more-btn:hover { color: var(--dk); }
+.gallery-more-btn .more-arrow {
+  display: inline-block; transform: rotate(90deg);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; line-height: 1;
+}
 
 /* ════════════════════════════════════════
    공유 섹션
@@ -760,6 +783,11 @@ footer p {
     so you also should love one another.”
   </p>
   <p class="greeting-ref">John 13,34</p>
+
+  <div class="greeting-family">
+    <p>전유문 · 홍명의<span class="gf-rel">의 장남</span><span class="gf-name">전선함</span></p>
+    <p>정이섭 · 하미정<span class="gf-rel">의 장녀</span><span class="gf-name">정혜련</span></p>
+  </div>
 </section>
 
 <!-- ══ 9월 달력 ══════════════════════════════════════════════ -->
@@ -825,7 +853,6 @@ footer p {
 
 <!-- ══ 연락처 ════════════════════════════════════════════════ -->
 <div class="contact-section sec">
-  <p class="section-label" style="text-align:center; margin-bottom:20px;">Contact</p>
 
   <!-- ── 마음 전하기 ── -->
   <div class="gift-banner" id="giftBanner">
@@ -856,20 +883,18 @@ footer p {
 
 <!-- ══ 갤러리 ════════════════════════════════════════════════ -->
 <div class="gallery-section sec">
-  <p class="section-label" style="text-align:center; margin-bottom:16px;">Gallery</p>
 
   <!-- 사진 그리드 (처음 9장 표시) -->
   <div class="gallery-grid" id="galleryGrid"></div>
 
   <!-- 사진 더보기 (9장 초과 시에만 노출) -->
   <div class="gallery-more-wrap" id="galleryMoreWrap" style="display:none;">
-    <button class="gallery-more-btn" onclick="expandGallery()">사진 더보기</button>
+    <button class="gallery-more-btn" onclick="expandGallery()">사진 더보기<span class="more-arrow">&#8250;</span></button>
   </div>
 </div>
 
 <!-- ══ 공유 ══════════════════════════════════════════════════ -->
 <div class="share-section sec">
-  <p class="section-label" style="margin-bottom:16px;">Share</p>
   <div class="share-btns">
 
     <!-- 링크 복사 -->
@@ -1231,23 +1256,40 @@ function closeContact() {
   document.body.style.overflow = '';
 }
 
-/* ══ 그리드 갤러리 ═══════════════════════════════════════════
+/* ══ 매거진형 그리드 갤러리 ══════════════════════════════════
    PHOTOS 배열에 사진 파일명만 추가/삭제하면 갤러리가 갱신됨.
    구조:
-   - 처음 9장만 그리드에 표시, 나머지는 .hidden 처리
-   - 9장 초과 시 '사진 더보기' 버튼 노출 → expandGallery()로 전체 표시
+   - 3열 그리드, FEATURE_EVERY 번째마다 2×2 큰 타일(매거진 포인트)
+   - 처음 GALLERY_PREVIEW 장만 표시, 나머지는 .hidden 처리
+   - GALLERY_PREVIEW 초과 시 '사진 더보기' 버튼 노출
    - 각 사진 클릭 → openViewer(i)로 전체화면 보기
+   ※ 사진 16장 예상: 5번째마다 큰 사진(0·5·10·15) → 4개의 포인트 타일
 ════════════════════════════════════════════════════════════ */
 const PHOTOS = [
-  { src: 'photo1.jpg', alt: '웨딩 사진 1' },
-  { src: 'photo2.jpg', alt: '웨딩 사진 2' },
-  { src: 'photo3.jpg', alt: '웨딩 사진 3' },
-  { src: 'photo4.jpg', alt: '웨딩 사진 4' },
-  { src: 'photo5.jpg', alt: '웨딩 사진 5' },
-  { src: 'photo6.jpg', alt: '웨딩 사진 6' },
+  { src: 'gallery_01.jpg', alt: '웨딩 사진 1' },
+  { src: 'gallery_02.jpg', alt: '웨딩 사진 2' },
+  { src: 'gallery_03.jpg', alt: '웨딩 사진 3' },
+  { src: 'gallery_04.jpg', alt: '웨딩 사진 4' },
+  { src: 'gallery_05.jpg', alt: '웨딩 사진 5' },
+  { src: 'gallery_06.jpg', alt: '웨딩 사진 6' },
+  { src: 'gallery_07.jpg', alt: '웨딩 사진 7' },
+  { src: 'gallery_08.jpg', alt: '웨딩 사진 8' },
+  { src: 'gallery_09.jpg', alt: '웨딩 사진 9' },
+  { src: 'gallery_10.jpg', alt: '웨딩 사진 10' },
+  { src: 'gallery_11.jpg', alt: '웨딩 사진 11' },
+  { src: 'gallery_12.jpg', alt: '웨딩 사진 12' },
+  { src: 'gallery_13.jpg', alt: '웨딩 사진 13' },
+  { src: 'gallery_14.jpg', alt: '웨딩 사진 14' },
+  { src: 'gallery_15.jpg', alt: '웨딩 사진 15' },
+  { src: 'gallery_16.jpg', alt: '웨딩 사진 16' },
+  { src: 'gallery_17.jpg', alt: '웨딩 사진 17' },
+  { src: 'gallery_18.jpg', alt: '웨딩 사진 18' },
+  { src: 'gallery_19.jpg', alt: '웨딩 사진 19' },
+  { src: 'gallery_20.jpg', alt: '웨딩 사진 20' },
 ];
 
 const GALLERY_PREVIEW = 9;   // 처음에 보여줄 사진 수
+const FEATURE_EVERY = 5;     // 큰 타일(2×2) 주기 — n번째마다 강조
 
 function buildGallery() {
   const grid = document.getElementById('galleryGrid');
@@ -1255,7 +1297,9 @@ function buildGallery() {
 
   PHOTOS.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'gallery-grid-item' + (i >= GALLERY_PREVIEW ? ' hidden' : '');
+    div.className = 'gallery-grid-item'
+      + (i % FEATURE_EVERY === 0 ? ' feature' : '')
+      + (i >= GALLERY_PREVIEW ? ' hidden' : '');
     div.onclick = () => openViewer(i);
     const img = document.createElement('img');
     img.src = p.src; img.alt = p.alt; img.loading = 'lazy';
@@ -1341,7 +1385,7 @@ function shareKakao() {
       content: {
         title: '전선함 ♥ 정혜련 결혼합니다',
         description: '2026년 9월 5일 토요일 낮 12시 · 한국프레스센터',
-        imageUrl: 'https://seonhamm.github.io/wedding/photo1.jpg',
+        imageUrl: 'https://seonhamm.github.io/wedding/gallery_01.jpg',
         link: {
           mobileWebUrl: window.location.href,
           webUrl: window.location.href,

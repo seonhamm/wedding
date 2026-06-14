@@ -10,6 +10,8 @@
 <meta property="og:title" content="전선함 ♥ 정혜련 결혼합니다">
 <meta property="og:description" content="2026년 9월 5일 토요일 낮 12시 · 한국프레스센터">
 <meta property="og:image" content="https://seonhamm.github.io/wedding/main1.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1800">
 <meta property="og:url" content="https://seonhamm.github.io/wedding/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="전선함 ♥ 정혜련 결혼합니다">
@@ -459,6 +461,7 @@ body {
   padding-bottom: 2px; font-family: 'Cormorant Garamond', serif;
   text-transform: uppercase;
 }
+.gift-account-divider { height: 1px; background: var(--cr); margin: 16px 0; }
 
 /* ════════════════════════════════════════
    갤러리 (대표 사진 1장)
@@ -491,7 +494,7 @@ body {
 }
 .share-btns {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0;
   border: 1px solid var(--cr);
 }
@@ -846,6 +849,13 @@ footer p {
           <div class="gift-account-num">734002-00-040783</div>
           <div class="gift-account-name">예금주 · 전선함</div>
           <span class="account-copy" onclick="copyText('734002-00-040783')">번호 복사</span>
+
+          <div class="gift-account-divider"></div>
+
+          <div class="gift-account-bank">국민은행</div>
+          <div class="gift-account-num">411401-01-000129</div>
+          <div class="gift-account-name">예금주 · 전유문</div>
+          <span class="account-copy" onclick="copyText('411401-01-000129')">번호 복사</span>
         </div>
         <div class="gift-account">
           <span class="gift-account-role">신부측</span>
@@ -878,17 +888,6 @@ footer p {
         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
       </svg>
       링크 복사
-    </button>
-
-    <!-- 카카오톡 공유 -->
-    <button class="share-btn" onclick="shareKakao()">
-      <svg class="share-icon share-icon-kakao" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="12" cy="10.5" rx="10" ry="7.5"/>
-        <path d="M7 14.5l1.5-4.5 2 3 2-4.5 1.5 4.5" stroke="none" fill="none"/>
-        <path d="M6 15.5 C6 15.5 5 20 5.5 20.5 C6 21 10 18 12 17.5" stroke-width="0" fill="var(--tp)"/>
-        <ellipse cx="12" cy="10.5" rx="10" ry="7.5" fill="none" stroke="none"/>
-      </svg>
-      카카오톡 공유
     </button>
 
     <!-- 구글 캘린더 -->
@@ -1342,60 +1341,6 @@ function fallbackCopyLink(url) {
     showToast('복사에 실패했습니다');
   }
   document.body.removeChild(el);
-}
-
-
-/* ══ 카카오톡 공유 ════════════════════════════════
-   Kakao.Share.sendDefault() 사용
-   - 스크립트 미로드 시 SDK를 동적으로 삽입 후 재시도
-   - 앱키: 본인 앱의 JavaScript 키로 교체 필요
-   - objectType 'feed': 썸네일 + 제목 + 설명 + 버튼
-════════════════════════════════════════════════ */
-const KAKAO_APP_KEY = '16d2d010422dcfc2758b4b569020f7f2';
-
-function shareKakao() {
-  const doShare = () => {
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: '전선함 ♥ 정혜련 결혼합니다',
-        description: '2026년 9월 5일 토요일 낮 12시 · 한국프레스센터',
-        imageUrl: 'https://seonhamm.github.io/wedding/main1.jpg?v=2',
-        link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
-        },
-      },
-      buttons: [
-        {
-          title: '청첩장 보기',
-          link: {
-            mobileWebUrl: window.location.href,
-            webUrl: window.location.href,
-          },
-        },
-      ],
-    });
-  };
-
-  if (window.Kakao && Kakao.isInitialized()) {
-    doShare();
-  } else {
-    // SDK 동적 로드
-    const script = document.createElement('script');
-    script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js';
-    script.onload = () => {
-      Kakao.init(KAKAO_APP_KEY);
-      doShare();
-    };
-    script.onerror = () => {
-      // SDK 로드 실패 시 카카오톡 링크 공유로 fallback
-      const url = encodeURIComponent(window.location.href);
-      const text = encodeURIComponent('전선함 ♥ 정혜련 결혼합니다\n2026년 9월 5일 토요일 낮 12시 · 한국프레스센터\n');
-      window.open(`https://sharer.kakao.com/talk/friends/picker/link?app_key=${KAKAO_APP_KEY}&validation_action=custom&validation_params={}`, '_blank');
-    };
-    document.head.appendChild(script);
-  }
 }
 
 
